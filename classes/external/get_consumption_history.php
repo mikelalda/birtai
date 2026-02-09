@@ -17,13 +17,13 @@
 /**
  * Web service for retrieving token consumption history.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   external
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace aiprovider_datacurso\external;
+namespace aiprovider_birtai\external;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -33,12 +33,12 @@ use external_function_parameters;
 use external_value;
 use external_single_structure;
 use external_multiple_structure;
-use aiprovider_datacurso\httpclient\datacurso_api;
+use aiprovider_birtai\httpclient\birtai_api;
 
 /**
- * External web service to fetch Datacurso API consumption history.
+ * External web service to fetch birtai API consumption history.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   external
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -105,9 +105,9 @@ class get_consumption_history extends \external_api {
 
         $context = \context_system::instance();
         self::validate_context($context);
-        require_capability('aiprovider/datacurso:viewreports', $context);
+        require_capability('aiprovider/birtai:viewreports', $context);
 
-        $client = new datacurso_api();
+        $client = new birtai_api();
 
         // Prepare query parameters for API request.
         $queryparams = [
@@ -131,10 +131,10 @@ class get_consumption_history extends \external_api {
                 $consumptions = [];
 
                 // Get available actions from provider.
-                $actions = \aiprovider_datacurso\provider::get_actions();
+                $actions = \aiprovider_birtai\provider::get_actions();
                 $actionmap = [];
 
-                $services = \aiprovider_datacurso\provider::get_services();
+                $services = \aiprovider_birtai\provider::get_services();
                 $servicesmap = [];
 
                 foreach ($services as $s) {
@@ -183,7 +183,7 @@ class get_consumption_history extends \external_api {
 
             return [
                 'status' => 'error',
-                'message' => get_string('nodata', 'aiprovider_datacurso'),
+                'message' => get_string('nodata', 'aiprovider_birtai'),
                 'consumption' => [],
             ];
         } catch (\Exception $e) {

@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\local;
+namespace aiprovider_birtai\local;
 
 /**
- * Manager for CRUD operations over aiprovider_datacurso_userlimit.
+ * Manager for CRUD operations over aiprovider_birtai_userlimit.
  *
- * @package    aiprovider_datacurso
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @package    aiprovider_birtai
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class user_token_limit_manager {
@@ -34,7 +34,7 @@ class user_token_limit_manager {
         global $DB;
         [$where, $params] = self::build_search_where($search);
         $sql = "SELECT COUNT(1)
-                  FROM {aiprovider_datacurso_userlimit} utl
+                  FROM {aiprovider_birtai_userlimit} utl
                   JOIN {user} u ON u.id = utl.userid
                  $where";
         return (int)$DB->get_field_sql($sql, $params);
@@ -48,7 +48,7 @@ class user_token_limit_manager {
      */
     public static function reset_usage(int $id): bool {
         global $DB, $USER;
-        if (!$DB->record_exists('aiprovider_datacurso_userlimit', ['id' => $id])) {
+        if (!$DB->record_exists('aiprovider_birtai_userlimit', ['id' => $id])) {
             return false;
         }
         $now = time();
@@ -59,7 +59,7 @@ class user_token_limit_manager {
             'usermodified' => $USER->id,
             'timemodified' => $now,
         ];
-        $DB->update_record('aiprovider_datacurso_userlimit', $record);
+        $DB->update_record('aiprovider_birtai_userlimit', $record);
         return true;
     }
 
@@ -80,7 +80,7 @@ class user_token_limit_manager {
         $orderby = self::map_sort($sort, $dir);
         $sql = "SELECT utl.id, utl.userid, utl.tokenlimit, utl.tokensused,
                        u.firstname, u.lastname, u.email
-                  FROM {aiprovider_datacurso_userlimit} utl
+                  FROM {aiprovider_birtai_userlimit} utl
                   JOIN {user} u ON u.id = utl.userid
                  $where
               ORDER BY $orderby";
@@ -95,7 +95,7 @@ class user_token_limit_manager {
      */
     public static function get_by_id(int $id): ?\stdClass {
         global $DB;
-        return $DB->get_record('aiprovider_datacurso_userlimit', ['id' => $id]) ?: null;
+        return $DB->get_record('aiprovider_birtai_userlimit', ['id' => $id]) ?: null;
     }
 
     /**
@@ -106,7 +106,7 @@ class user_token_limit_manager {
      */
     public static function delete(int $id): bool {
         global $DB;
-        return $DB->delete_records('aiprovider_datacurso_userlimit', ['id' => $id]);
+        return $DB->delete_records('aiprovider_birtai_userlimit', ['id' => $id]);
     }
 
     /**
@@ -122,17 +122,17 @@ class user_token_limit_manager {
         $now = time();
 
         if ($id) {
-            $record = $DB->get_record('aiprovider_datacurso_userlimit', ['id' => $id], '*', MUST_EXIST);
+            $record = $DB->get_record('aiprovider_birtai_userlimit', ['id' => $id], '*', MUST_EXIST);
             $record->tokenlimit = $tokenlimit;
             $record->usermodified = $USER->id;
             $record->timemodified = $now;
-            $DB->update_record('aiprovider_datacurso_userlimit', $record);
+            $DB->update_record('aiprovider_birtai_userlimit', $record);
             return $record->id;
         }
 
         // Check if a record already exists for this user.
-        if ($DB->record_exists('aiprovider_datacurso_userlimit', ['userid' => $userid])) {
-            throw new \moodle_exception('error_usertokenlimit_exists', 'aiprovider_datacurso');
+        if ($DB->record_exists('aiprovider_birtai_userlimit', ['userid' => $userid])) {
+            throw new \moodle_exception('error_usertokenlimit_exists', 'aiprovider_birtai');
         }
 
         $record = (object) [
@@ -145,7 +145,7 @@ class user_token_limit_manager {
             'timecreated' => $now,
             'timemodified' => $now,
         ];
-        return (int)$DB->insert_record('aiprovider_datacurso_userlimit', $record);
+        return (int)$DB->insert_record('aiprovider_birtai_userlimit', $record);
     }
 
     /**

@@ -18,7 +18,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-  @template aiprovider_datacurso/webservice/actions
+  @template aiprovider_birtai/webservice/actions
   Renders the action buttons area. Keeps data-region attributes for JS hooks.
 
   Example context (json):
@@ -31,27 +31,27 @@
 }}
 <div class="d-flex gap-2 mb-4" style="gap: 1rem;">
   {{#retryonly}}
-    <button class="btn btn-secondary" data-action="retry" data-region="aiprovider_datacurso/webservice-btn-retry">
-      <i class="fa fa-wrench mr-2"></i>{{#str}} ws_btn_retry, aiprovider_datacurso {{/str}}
+    <button class="btn btn-secondary" data-action="retry" data-region="aiprovider_birtai/webservice-btn-retry">
+      <i class="fa fa-wrench mr-2"></i>{{#str}} ws_btn_retry, aiprovider_birtai {{/str}}
     </button>
   {{/retryonly}}
   {{^retryonly}}
     {{#registration.lastsent}}
       {{#isconfigured}}
-        <button class="btn btn-warning" data-action="regenerate" data-region="aiprovider_datacurso/webservice-btn-regenerate">
-          <i class="fa fa-refresh mr-2"></i>{{#str}} ws_btn_regenerate, aiprovider_datacurso {{/str}}
+        <button class="btn btn-warning" data-action="regenerate" data-region="aiprovider_birtai/webservice-btn-regenerate">
+          <i class="fa fa-refresh mr-2"></i>{{#str}} ws_btn_regenerate, aiprovider_birtai {{/str}}
         </button>
       {{/isconfigured}}
       {{#needsrepair}}
-        <button class="btn btn-secondary" data-action="retry" data-region="aiprovider_datacurso/webservice-btn-retry">
-          <i class="fa fa-wrench mr-2"></i>{{#str}} ws_btn_retry, aiprovider_datacurso {{/str}}
+        <button class="btn btn-secondary" data-action="retry" data-region="aiprovider_birtai/webservice-btn-retry">
+          <i class="fa fa-wrench mr-2"></i>{{#str}} ws_btn_retry, aiprovider_birtai {{/str}}
         </button>
       {{/needsrepair}}
     {{/registration.lastsent}}
     {{^registration.lastsent}}
       {{^isconfigured}}
-        <button class="btn btn-primary" data-action="setup" data-region="aiprovider_datacurso/webservice-btn-setup">
-          <i class="fa fa-cogs mr-2"></i>{{#str}} ws_btn_setup, aiprovider_datacurso {{/str}}
+        <button class="btn btn-primary" data-action="setup" data-region="aiprovider_birtai/webservice-btn-setup">
+          <i class="fa fa-cogs mr-2"></i>{{#str}} ws_btn_setup, aiprovider_birtai {{/str}}
         </button>
       {{/isconfigured}}
     {{/registration.lastsent}}

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso;
+namespace aiprovider_birtai;
 
 use core\http_client;
 use core_ai\ai_image;
@@ -29,15 +29,39 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/filelib.php');
 
 /**
- * Processor for generating images via Datacurso AI provider.
+ * Processor for generating images via birtai AI provider.
  *
- * @package    aiprovider_datacurso
- * @copyright  Developer <developer@datacurso.com>
+ * @package    aiprovider_birtai
+ * @copyright  Developer <developer@birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class process_generate_image extends abstract_processor {
     /** @var int Number of images to generate. */
     private int $numberimages = 1;
+
+    /** Default local API URL. */
+    private const DEFAULT_LOCAL_URL = 'http://localhost:8001';
+
+    /** Default external API URL. */
+    private const DEFAULT_EXTERNAL_URL = 'https://plugins-ai.birtai.com';
+
+    /**
+     * Get the base API URL based on configuration.
+     *
+     * @return string The base URL to use.
+     */
+    protected function get_base_url(): string {
+        $localurl = get_config('aiprovider_birtai', 'local_api_url');
+        $uselocalapi = get_config('aiprovider_birtai', 'use_local_api');
+
+        if (!empty($uselocalapi) && !empty($localurl)) {
+            return rtrim($localurl, '/');
+        } else if (!empty($uselocalapi)) {
+            return self::DEFAULT_LOCAL_URL;
+        }
+
+        return self::DEFAULT_EXTERNAL_URL;
+    }
 
     /**
      * Returns the endpoint URI for this processor.
@@ -46,7 +70,7 @@ class process_generate_image extends abstract_processor {
      */
     #[\Override]
     protected function get_endpoint(): UriInterface {
-        return new Uri('https://plugins-ai.datacurso.com/provider/images/generations');
+        return new Uri($this->get_base_url() . '/provider/images/generations');
     }
 
     /**
@@ -67,7 +91,7 @@ class process_generate_image extends abstract_processor {
         if (empty($prompt)) {
             throw new \moodle_exception(
                 'emptyprompt',
-                'aiprovider_datacurso',
+                'aiprovider_birtai',
                 '',
                 null,
                 'Image generation requires a prompt text'
@@ -86,10 +110,10 @@ class process_generate_image extends abstract_processor {
     }
 
     /**
-     * Convert aspect ratio selector to the Datacurso image size expected by the API.
+     * Convert aspect ratio selector to the birtai image size expected by the API.
      *
      * @param string $ratio Aspect ratio configuration value
-     * @return string Datacurso size token (e.g. 1024x1024)
+     * @return string birtai size token (e.g. 1024x1024)
      */
     private function calculate_size(string $ratio): string {
         return match ($ratio) {
@@ -113,7 +137,7 @@ class process_generate_image extends abstract_processor {
         // Debug: Log the request body for development purposes.
         debugging('Image generation request body: ' . $body, DEBUG_DEVELOPER);
 
-        $licensekey = get_config('aiprovider_datacurso', 'licensekey');
+        $licensekey = get_config('aiprovider_birtai', 'licensekey');
 
         return new Request(
             'POST',
@@ -121,7 +145,7 @@ class process_generate_image extends abstract_processor {
             [
                 'Content-Type' => 'application/json',
                 'License-Key' => $licensekey,
-                'User-Agent' => 'moodle-aiprovider-datacurso',
+                'User-Agent' => 'moodle-aiprovider-birtai',
             ],
             $body
         );
@@ -143,7 +167,7 @@ class process_generate_image extends abstract_processor {
             return [
                 'success' => false,
                 'errorcode' => 400,
-                'errormessage' => get_string('responseinvalidaimage', 'aiprovider_datacurso'),
+                'errormessage' => get_string('responseinvalidaimage', 'aiprovider_birtai'),
             ];
         }
 
@@ -155,7 +179,7 @@ class process_generate_image extends abstract_processor {
             return [
                 'success' => false,
                 'errorcode' => 400,
-                'errormessage' => get_string('responseinvalidaimage', 'aiprovider_datacurso'),
+                'errormessage' => get_string('responseinvalidaimage', 'aiprovider_birtai'),
             ];
         }
 
@@ -167,7 +191,7 @@ class process_generate_image extends abstract_processor {
             return [
                 'success' => false,
                 'errorcode' => 500,
-                'errormessage' => get_string('responseinvalidaimagecreate', 'aiprovider_datacurso'),
+                'errormessage' => get_string('responseinvalidaimagecreate', 'aiprovider_birtai'),
             ];
         }
 
@@ -181,7 +205,7 @@ class process_generate_image extends abstract_processor {
     }
 
     /**
-     * Downloads an image file from the Datacurso API and stores it in the user's draft area.
+     * Downloads an image file from the birtai API and stores it in the user's draft area.
      *
      * @param string $imageurl The full URL of the image to download.
      * @param int $userid The ID of the user who owns the draft area.
@@ -223,7 +247,7 @@ class process_generate_image extends abstract_processor {
 
         require_once("{$CFG->libdir}/filelib.php");
 
-        $filename = 'datacurso_image_' . time() . '.png';
+        $filename = 'birtai_image_' . time() . '.png';
         $tempdst = make_request_directory() . DIRECTORY_SEPARATOR . $filename;
         file_put_contents($tempdst, $imagebinary);
 

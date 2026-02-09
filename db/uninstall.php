@@ -17,15 +17,15 @@
 /**
  * Code that is executed before the tables and data are dropped during the plugin uninstallation.
  *
- * @package     aiprovider_datacurso
+ * @package     aiprovider_birtai
  * @category    upgrade
- * @copyright   Josue <josue@datacurso.com>
+ * @copyright   Josue <josue@birtai.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
  * Custom uninstallation procedure.
  */
-function xmldb_aiprovider_datacurso_uninstall() {
+function xmldb_aiprovider_birtai_uninstall() {
     return true;
 }

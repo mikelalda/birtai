@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso;
+namespace aiprovider_birtai;
 
 use core\http_client;
 use core_ai\process_base;
@@ -26,12 +26,12 @@ use Psr\Http\Message\UriInterface;
 use GuzzleHttp\Psr7\Uri;
 
 /**
- * Abstract base class for Datacurso AI provider processors.
+ * Abstract base class for birtai AI provider processors.
  *
  * Defines the common structure for sending requests and handling responses
  * from the external AI service.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  Josue
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -77,7 +77,7 @@ abstract class abstract_processor extends process_base {
     }
 
     /**
-     * Executes the HTTP request to the external Datacurso AI service.
+     * Executes the HTTP request to the external birtai AI service.
      *
      * @return array Processed response data, either success or error.
      */
@@ -85,7 +85,7 @@ abstract class abstract_processor extends process_base {
     protected function query_ai_api(): array {
         global $USER;
 
-        $licensekey = get_config('aiprovider_datacurso', 'licensekey');
+        $licensekey = get_config('aiprovider_birtai', 'licensekey');
         $userid = $this->action->get_configuration('userid') ?? $USER->id;
 
         $client = \core\di::get(http_client::class);

@@ -16,15 +16,15 @@
 /**
  * TODO describe module user_token_limits
  *
- * @module     aiprovider_datacurso/user_token_limits
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @module     aiprovider_birtai/user_token_limits
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 import Notification from "core/notification";
 import {get_strings as getStrings, get_string as getString} from "core/str";
-import {createUserTokenLimitModal} from "aiprovider_datacurso/modals";
-import {deleteUserTokenLimit, resetUserTokenUsage} from "aiprovider_datacurso/repository";
+import {createUserTokenLimitModal} from "aiprovider_birtai/modals";
+import {deleteUserTokenLimit, resetUserTokenUsage} from "aiprovider_birtai/repository";
 
 
 /**
@@ -49,8 +49,8 @@ const handleDelete = async (link) => {
     const id = link.dataset.id;
     const username = link.dataset.username || "";
     const [title, message] = await getStrings([
-        {key: "confirm_delete_title", component: "aiprovider_datacurso"},
-        {key: "confirm_delete_message", component: "aiprovider_datacurso", param: username}
+        {key: "confirm_delete_title", component: "aiprovider_birtai"},
+        {key: "confirm_delete_message", component: "aiprovider_birtai", param: username}
     ]);
 
     await confirmAction(title, message, async () => {
@@ -60,10 +60,10 @@ const handleDelete = async (link) => {
                 window.location.reload();
                 return;
             }
-            const err = await getString("usertokenlimit_delete_failed", "aiprovider_datacurso");
+            const err = await getString("usertokenlimit_delete_failed", "aiprovider_birtai");
             Notification.alert(title, result && result.message ? result.message : err);
         } catch (ex) {
-            const err = await getString("usertokenlimit_delete_failed", "aiprovider_datacurso");
+            const err = await getString("usertokenlimit_delete_failed", "aiprovider_birtai");
             Notification.alert(title, err);
         }
     });
@@ -77,8 +77,8 @@ const handleReset = async (link) => {
     const id = link.dataset.id;
     const username = link.dataset.username || "";
     const [title, message] = await getStrings([
-        {key: "usertokenlimit_reset_usage", component: "aiprovider_datacurso"},
-        {key: "confirm_reset_usage_message", component: "aiprovider_datacurso", param: username}
+        {key: "usertokenlimit_reset_usage", component: "aiprovider_birtai"},
+        {key: "confirm_reset_usage_message", component: "aiprovider_birtai", param: username}
     ]);
 
     await confirmAction(title, message, async () => {
@@ -88,17 +88,17 @@ const handleReset = async (link) => {
                 window.location.reload();
                 return;
             }
-            const err = await getString("usertokenlimit_reset_failed", "aiprovider_datacurso");
+            const err = await getString("usertokenlimit_reset_failed", "aiprovider_birtai");
             Notification.alert(title, result && result.message ? result.message : err);
         } catch (ex) {
-            const err = await getString("usertokenlimit_reset_failed", "aiprovider_datacurso");
+            const err = await getString("usertokenlimit_reset_failed", "aiprovider_birtai");
             Notification.alert(title, err);
         }
     });
 };
 
 export const init = () => {
-    const root = document.querySelector('[data-region="aiprovider-datacurso-userlimits"]');
+    const root = document.querySelector('[data-region="aiprovider-birtai-userlimits"]');
     if (!root) {
         return;
     }
@@ -123,7 +123,7 @@ export const init = () => {
             const returnurl = window.location.pathname + window.location.search;
             const modal = createUserTokenLimitModal(
                 addLink,
-                getString("usertokenlimit_add_title", "aiprovider_datacurso"),
+                getString("usertokenlimit_add_title", "aiprovider_birtai"),
                 0,
                 returnurl
             );
@@ -144,7 +144,7 @@ export const init = () => {
             const returnurl = window.location.pathname + window.location.search;
             const modal = createUserTokenLimitModal(
                 editLink,
-                getString("usertokenlimit_edit_title", "aiprovider_datacurso", username),
+                getString("usertokenlimit_edit_title", "aiprovider_birtai", username),
                 id,
                 returnurl,
                 username

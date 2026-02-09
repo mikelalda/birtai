@@ -18,22 +18,22 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-  @template aiprovider_datacurso/webservice/user_role
+  @template aiprovider_birtai/webservice/user_role
   Renders the user and role status section.
 
   Example context (json):
   {
-    "user": {"username": "svc_datacurso", "email": "service@datacurso.com"},
-    "role": {"shortname": "wsdatacurso", "name": "Datacurso Web Service"}
+    "user": {"username": "svc_birtai", "email": "service@birtai.com"},
+    "role": {"shortname": "wsbirtai", "name": "birtai Web Service"}
   }
 }}
 <div class="row mb-3">
   <div class="col-md-6">
     <div class="d-flex align-items-center mb-2">
       <span class="badge badge-{{#user}}success{{/user}}{{^user}}danger{{/user}} mr-2">
-        {{#user}}{{#str}} exists, aiprovider_datacurso{{/str}}{{/user}}{{^user}}{{#str}} not_created, aiprovider_datacurso{{/str}}{{/user}}
+        {{#user}}{{#str}} exists, aiprovider_birtai{{/str}}{{/user}}{{^user}}{{#str}} not_created, aiprovider_birtai{{/str}}{{/user}}
       </span>
-      <strong>{{#str}} ws_user, aiprovider_datacurso {{/str}}</strong>
+      <strong>{{#str}} ws_user, aiprovider_birtai {{/str}}</strong>
     </div>
     {{#user}}
       <div>{{user.username}}</div>
@@ -43,9 +43,9 @@
   <div class="col-md-6">
     <div class="d-flex align-items-center mb-2">
       <span class="badge badge-{{#role}}success{{/role}}{{^role}}danger{{/role}} mr-2">
-        {{#role}}{{#str}} exists, aiprovider_datacurso{{/str}}{{/role}}{{^role}}{{#str}} not_created, aiprovider_datacurso{{/str}}{{/role}}
+        {{#role}}{{#str}} exists, aiprovider_birtai{{/str}}{{/role}}{{^role}}{{#str}} not_created, aiprovider_birtai{{/str}}{{/role}}
       </span>
-      <strong>{{#str}} ws_role, aiprovider_datacurso {{/str}}</strong>
+      <strong>{{#str}} ws_role, aiprovider_birtai {{/str}}</strong>
     </div>
     {{#role}}
       <div>{{role.shortname}}</div>

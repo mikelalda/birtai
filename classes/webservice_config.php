@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso;
+namespace aiprovider_birtai;
 
-use aiprovider_datacurso\httpclient\ai_services_api;
+use aiprovider_birtai\httpclient\ai_services_api;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -30,7 +30,7 @@ use core_plugin_manager;
 use moodle_exception;
 
 /**
- * Automates Moodle web service configuration for the Datacurso AI provider.
+ * Automates Moodle web service configuration for the birtai AI provider.
  *
  * This class mirrors the steps of the provided CLI reference, but exposes
  * them to the UI and AJAX so admins can configure everything with one click.
@@ -46,24 +46,24 @@ use moodle_exception;
  *
  * All methods return structured arrays (safe for AJAX) and never expose tokens.
  *
- * @package    aiprovider_datacurso
- * @copyright  Datacurso 2025
+ * @package    aiprovider_birtai
+ * @copyright  birtai 2025
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class webservice_config {
     /** Constants used for creating items. */
     /** @var string Username for the webservice user. */
-    public const USERNAME = 'datacursows';
+    public const USERNAME = 'birtaiws';
     /** @var string Email for the webservice user. */
-    public const USEREMAIL = 'webservice@datacurso.com';
+    public const USEREMAIL = 'webservice@birtai.com';
     /** @var string Name for the role. */
-    public const ROLENAME = 'Datacurso web service';
+    public const ROLENAME = 'birtai web service';
     /** @var string Short name for the role. */
-    public const ROLESHORTNAME = 'datacursows';
+    public const ROLESHORTNAME = 'birtaiws';
     /** @var string Name for the service. */
-    public const SERVICENAME = 'Datacurso web service';
+    public const SERVICENAME = 'birtai web service';
     /** @var string Short name for the service. */
-    public const SERVICESHORTNAME = 'datacursows';
+    public const SERVICESHORTNAME = 'birtaiws';
 
     /**
      * Returns a summary of the current configuration status.
@@ -84,7 +84,7 @@ class webservice_config {
     }
 
     /**
-     * Quickly tell if the Datacurso webservice has been fully configured.
+     * Quickly tell if the birtai webservice has been fully configured.
      *
      * @return bool
      */
@@ -100,7 +100,7 @@ class webservice_config {
      */
     public static function get_url(): \moodle_url {
         global $CFG;
-        return new \moodle_url('/ai/provider/datacurso/admin/webservice_config.php');
+        return new \moodle_url('/ai/provider/birtai/admin/webservice_config.php');
     }
 
     /**
@@ -120,9 +120,9 @@ class webservice_config {
             'tokenexists' => false,
             'tokencreated' => null,
             'registration' => [
-                'verified' => get_config('aiprovider_datacurso', 'registration_verified') ?: false,
-                'lastsent' => get_config('aiprovider_datacurso', 'registration_lastsent') ?: '',
-                'laststatus' => get_config('aiprovider_datacurso', 'registration_laststatus') ?: '',
+                'verified' => get_config('aiprovider_birtai', 'registration_verified') ?: false,
+                'lastsent' => get_config('aiprovider_birtai', 'registration_lastsent') ?: '',
+                'laststatus' => get_config('aiprovider_birtai', 'registration_laststatus') ?: '',
             ],
             'site' => [
                 'domain' => $CFG->wwwroot,
@@ -272,33 +272,33 @@ class webservice_config {
 
         try {
             // 1) Enable required plugins.
-            $messages[] = get_string('ws_step_enableauth', 'aiprovider_datacurso');
+            $messages[] = get_string('ws_step_enableauth', 'aiprovider_birtai');
             self::enable_webservices_and_rest();
 
             // 2) Ensure service user exists.
-            $messages[] = get_string('ws_step_user_check', 'aiprovider_datacurso', self::USERNAME);
+            $messages[] = get_string('ws_step_user_check', 'aiprovider_birtai', self::USERNAME);
             $user = self::ensure_service_user();
 
             // 3) Ensure role and caps.
             [$roleid, $rolecreated] = self::ensure_role();
             $messages[] = $rolecreated
-                ? get_string('ws_step_role_create', 'aiprovider_datacurso', self::ROLENAME)
-                : get_string('ws_step_role_exists', 'aiprovider_datacurso', $roleid);
-            $messages[] = get_string('ws_step_role_caps', 'aiprovider_datacurso');
+                ? get_string('ws_step_role_create', 'aiprovider_birtai', self::ROLENAME)
+                : get_string('ws_step_role_exists', 'aiprovider_birtai', $roleid);
+            $messages[] = get_string('ws_step_role_caps', 'aiprovider_birtai');
             self::assign_role_capabilities($roleid);
-            $messages[] = get_string('ws_step_role_assign', 'aiprovider_datacurso');
+            $messages[] = get_string('ws_step_role_assign', 'aiprovider_birtai');
             self::assign_role_to_user($roleid, $user->id);
 
             // 4) Ensure external service and functions.
-            $messages[] = get_string('ws_step_service_enable', 'aiprovider_datacurso');
+            $messages[] = get_string('ws_step_service_enable', 'aiprovider_birtai');
             $service = self::ensure_external_service();
-            $messages[] = get_string('ws_step_service_functions', 'aiprovider_datacurso');
+            $messages[] = get_string('ws_step_service_functions', 'aiprovider_birtai');
             self::attach_default_functions($service->id);
-            $messages[] = get_string('ws_step_service_user', 'aiprovider_datacurso');
+            $messages[] = get_string('ws_step_service_user', 'aiprovider_birtai');
             self::authorise_user_for_service($service->id, $user->id);
 
             // 5) Ensure token and send registration.
-            $messages[] = get_string('ws_step_token_create', 'aiprovider_datacurso');
+            $messages[] = get_string('ws_step_token_create', 'aiprovider_birtai');
             $token = self::get_or_create_token($service, $user->id);
             if (!empty($token)) {
                 $sendmessages = self::send_registration($token);
@@ -311,13 +311,13 @@ class webservice_config {
 
             $status = self::get_status();
             if ($status['registration']['verified']) {
-                $messages[] = get_string('ws_step_token_generated', 'aiprovider_datacurso');
+                $messages[] = get_string('ws_step_token_generated', 'aiprovider_birtai');
             }
             $status['messages'] = $messages;
             return $status;
         } catch (\Exception $e) {
             $status = self::get_status();
-            $messages[] = get_string('ws_error_setup', 'aiprovider_datacurso');
+            $messages[] = get_string('ws_error_setup', 'aiprovider_birtai');
             $status['messages'] = $messages;
             return $status;
         }
@@ -336,7 +336,7 @@ class webservice_config {
 
         $status = self::get_status();
         if (empty($status['service']['id']) || empty($status['user']['id'])) {
-            $status['messages'][] = get_string('ws_error_missing_setup', 'aiprovider_datacurso');
+            $status['messages'][] = get_string('ws_error_missing_setup', 'aiprovider_birtai');
             return $status;
         }
 
@@ -358,12 +358,12 @@ class webservice_config {
 
             $status = self::get_status();
             if ($status['registration']['verified']) {
-                $messages[] = get_string('ws_step_token_regenerated', 'aiprovider_datacurso');
+                $messages[] = get_string('ws_step_token_regenerated', 'aiprovider_birtai');
             }
             $status['messages'] = $messages;
             return $status;
         } catch (\Exception $e) {
-            $status['messages'][] = get_string('ws_error_regenerate_token', 'aiprovider_datacurso');
+            $status['messages'][] = get_string('ws_error_regenerate_token', 'aiprovider_birtai');
             return $status;
         }
     }
@@ -399,7 +399,7 @@ class webservice_config {
         $user = (object) [
             'username' => self::USERNAME,
             'password' => AUTH_PASSWORD_NOT_CACHED,
-            'firstname' => 'Datacurso',
+            'firstname' => 'birtai',
             'lastname' => 'Service',
             'email' => self::USEREMAIL,
             'auth' => 'webservice',
@@ -422,7 +422,7 @@ class webservice_config {
             $roleid = (int)$DB->get_field('role', 'id', ['shortname' => self::ROLESHORTNAME]);
             return [$roleid, false];
         }
-        $roleid = create_role(self::ROLENAME, self::ROLESHORTNAME, 'Role for Datacurso web service');
+        $roleid = create_role(self::ROLENAME, self::ROLESHORTNAME, 'Role for birtai web service');
         return [$roleid, true];
     }
 
@@ -667,7 +667,7 @@ class webservice_config {
     }
 
     /**
-     * Upgrade-time synchronization: if the Datacurso service/role already exist,
+     * Upgrade-time synchronization: if the birtai service/role already exist,
      * attach any new WS functions to the service and assign any new capabilities to the role.
      * No external calls are performed.
      *
@@ -751,19 +751,19 @@ class webservice_config {
         try {
             $result = $client->request('POST', '/register-site', $payload);
             $verified = $result['verified'] ?? false;
-            set_config('registration_verified', $verified, 'aiprovider_datacurso');
+            set_config('registration_verified', $verified, 'aiprovider_birtai');
             // Persist last sent time and human status for UI clarity.
             $datestr = userdate(time(), get_string('strftimedatetime', 'langconfig'));
-            set_config('registration_lastsent', $datestr, 'aiprovider_datacurso');
-            set_config('registration_laststatus', $verified ? 'sent_verified' : 'sent_pending', 'aiprovider_datacurso');
-            return [get_string('ws_step_registration_sent', 'aiprovider_datacurso')];
+            set_config('registration_lastsent', $datestr, 'aiprovider_birtai');
+            set_config('registration_laststatus', $verified ? 'sent_verified' : 'sent_pending', 'aiprovider_birtai');
+            return [get_string('ws_step_registration_sent', 'aiprovider_birtai')];
         } catch (\Exception $e) {
-            set_config('registration_verified', false, 'aiprovider_datacurso');
+            set_config('registration_verified', false, 'aiprovider_birtai');
             // Persist failure state as well, so UI can decide retry-only.
             $datestr = userdate(time(), get_string('strftimedatetime', 'langconfig'));
-            set_config('registration_lastsent', $datestr, 'aiprovider_datacurso');
-            set_config('registration_laststatus', 'error', 'aiprovider_datacurso');
-            return [get_string('ws_error_registration', 'aiprovider_datacurso', $e->getMessage())];
+            set_config('registration_lastsent', $datestr, 'aiprovider_birtai');
+            set_config('registration_laststatus', 'error', 'aiprovider_birtai');
+            return [get_string('ws_error_registration', 'aiprovider_birtai', $e->getMessage())];
         }
     }
 
@@ -793,7 +793,7 @@ class webservice_config {
                 context_system::instance(),
                 0,
                 '',
-                'datacurso token'
+                'birtai token'
             );
         }
 

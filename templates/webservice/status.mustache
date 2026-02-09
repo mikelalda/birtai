@@ -18,7 +18,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-  @template aiprovider_datacurso/webservice/status
+  @template aiprovider_birtai/webservice/status
   Renders the Web Services and REST status badges.
 
   Example context (json):
@@ -30,18 +30,18 @@
 <div class="row mb-3">
   <div class="col-md-6">
     <div class="d-flex align-items-center mb-2">
-      <span class="badge mr-2 {{#webservicesenabled}}badge-success{{/webservicesenabled}}{{^webservicesenabled}}badge-danger{{/webservicesenabled}}" data-region="aiprovider_datacurso/ws-enabled">
-        {{#webservicesenabled}}{{#str}} enabled, aiprovider_datacurso{{/str}}{{/webservicesenabled}}{{^webservicesenabled}}{{#str}} disabled, aiprovider_datacurso{{/str}}{{/webservicesenabled}}
+      <span class="badge mr-2 {{#webservicesenabled}}badge-success{{/webservicesenabled}}{{^webservicesenabled}}badge-danger{{/webservicesenabled}}" data-region="aiprovider_birtai/ws-enabled">
+        {{#webservicesenabled}}{{#str}} enabled, aiprovider_birtai{{/str}}{{/webservicesenabled}}{{^webservicesenabled}}{{#str}} disabled, aiprovider_birtai{{/str}}{{/webservicesenabled}}
       </span>
-      <strong>{{#str}} ws_enabled, aiprovider_datacurso {{/str}}</strong>
+      <strong>{{#str}} ws_enabled, aiprovider_birtai {{/str}}</strong>
     </div>
   </div>
   <div class="col-md-6">
     <div class="d-flex align-items-center mb-2">
-      <span class="badge mr-2 {{#restenabled}}badge-success{{/restenabled}}{{^restenabled}}badge-danger{{/restenabled}}" data-region="aiprovider_datacurso/rest-enabled">
-        {{#restenabled}}{{#str}} enabled, aiprovider_datacurso{{/str}}{{/restenabled}}{{^restenabled}}{{#str}} disabled, aiprovider_datacurso{{/str}}{{/restenabled}}
+      <span class="badge mr-2 {{#restenabled}}badge-success{{/restenabled}}{{^restenabled}}badge-danger{{/restenabled}}" data-region="aiprovider_birtai/rest-enabled">
+        {{#restenabled}}{{#str}} enabled, aiprovider_birtai{{/str}}{{/restenabled}}{{^restenabled}}{{#str}} disabled, aiprovider_birtai{{/str}}{{/restenabled}}
       </span>
-      <strong>{{#str}} rest_enabled, aiprovider_datacurso {{/str}}</strong>
+      <strong>{{#str}} rest_enabled, aiprovider_birtai {{/str}}</strong>
     </div>
   </div>
 </div>

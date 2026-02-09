@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso;
+namespace aiprovider_birtai;
 
 use context_system;
 use context_user;
@@ -23,15 +23,15 @@ use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use core_privacy\tests\provider_testcase;
-use aiprovider_datacurso\privacy\provider;
+use aiprovider_birtai\privacy\provider;
 use stdClass;
 
 /**
- * Privacy provider tests for Datacurso AI provider.
+ * Privacy provider tests for birtai AI provider.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   test
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class privacy_provider_test extends provider_testcase {
@@ -47,7 +47,7 @@ final class privacy_provider_test extends provider_testcase {
     /**
      * get_contexts_for_userid returns user context only when data exists.
      *
-     * @covers \aiprovider_datacurso\privacy\provider::get_contexts_for_userid
+     * @covers \aiprovider_birtai\privacy\provider::get_contexts_for_userid
      */
     public function test_get_contexts_for_userid(): void {
         $user = $this->getDataGenerator()->create_user();
@@ -66,10 +66,10 @@ final class privacy_provider_test extends provider_testcase {
     /**
      * Only users with user context are fetched.
      *
-     * @covers \aiprovider_datacurso\privacy\provider::get_users_in_context
+     * @covers \aiprovider_birtai\privacy\provider::get_users_in_context
      */
     public function test_get_users_in_context(): void {
-        $component = 'aiprovider_datacurso';
+        $component = 'aiprovider_birtai';
         $user = $this->getDataGenerator()->create_user();
         $usercontext = context_user::instance($user->id);
 
@@ -93,7 +93,7 @@ final class privacy_provider_test extends provider_testcase {
     /**
      * User data is exported correctly.
      *
-     * @covers \aiprovider_datacurso\privacy\provider::export_user_data
+     * @covers \aiprovider_birtai\privacy\provider::export_user_data
      */
     public function test_export_user_data(): void {
         $user = $this->getDataGenerator()->create_user();
@@ -103,12 +103,12 @@ final class privacy_provider_test extends provider_testcase {
         $writer = writer::with_context($usercontext);
         $this->assertFalse($writer->has_any_data());
 
-        $approvedlist = new approved_contextlist($user, 'aiprovider_datacurso', [$usercontext->id]);
+        $approvedlist = new approved_contextlist($user, 'aiprovider_birtai', [$usercontext->id]);
         provider::export_user_data($approvedlist);
 
         $data = $writer->get_data([
-            get_string('privacy:metadata:aiprovider_datacurso', 'aiprovider_datacurso'),
-            get_string('privacy:metadata:aiprovider_datacurso_rlimit', 'aiprovider_datacurso'),
+            get_string('privacy:metadata:aiprovider_birtai', 'aiprovider_birtai'),
+            get_string('privacy:metadata:aiprovider_birtai_rlimit', 'aiprovider_birtai'),
         ]);
 
         // Compare expected fields (cast scalar for consistency).
@@ -125,7 +125,7 @@ final class privacy_provider_test extends provider_testcase {
     /**
      * Delete all users in a user context removes records for that user.
      *
-     * @covers \aiprovider_datacurso\privacy\provider::delete_data_for_all_users_in_context
+     * @covers \aiprovider_birtai\privacy\provider::delete_data_for_all_users_in_context
      */
     public function test_delete_data_for_all_users_in_context(): void {
         global $DB;
@@ -137,19 +137,19 @@ final class privacy_provider_test extends provider_testcase {
         $user2 = $this->getDataGenerator()->create_user();
         $rec2 = $this->create_usage_record($user2->id, 'local_coursegen');
 
-        $this->assertCount(1, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user1->id]));
-        $this->assertCount(1, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user2->id]));
+        $this->assertCount(1, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user1->id]));
+        $this->assertCount(1, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user2->id]));
 
         provider::delete_data_for_all_users_in_context($user1ctx);
 
-        $this->assertCount(0, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user1->id]));
-        $this->assertCount(1, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user2->id]));
+        $this->assertCount(0, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user1->id]));
+        $this->assertCount(1, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user2->id]));
     }
 
     /**
      * Delete data for user via approved context list.
      *
-     * @covers \aiprovider_datacurso\privacy\provider::delete_data_for_user
+     * @covers \aiprovider_birtai\privacy\provider::delete_data_for_user
      */
     public function test_delete_data_for_user(): void {
         global $DB;
@@ -161,23 +161,23 @@ final class privacy_provider_test extends provider_testcase {
         $user2 = $this->getDataGenerator()->create_user();
         $rec2 = $this->create_usage_record($user2->id, 'local_coursegen');
 
-        $this->assertCount(1, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user1->id]));
-        $this->assertCount(1, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user2->id]));
+        $this->assertCount(1, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user1->id]));
+        $this->assertCount(1, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user2->id]));
 
-        $approved = new approved_contextlist($user1, 'aiprovider_datacurso', [$user1ctx->id]);
+        $approved = new approved_contextlist($user1, 'aiprovider_birtai', [$user1ctx->id]);
         provider::delete_data_for_user($approved);
 
-        $this->assertCount(0, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user1->id]));
-        $this->assertCount(1, $DB->get_records('aiprovider_datacurso_rlimit', ['userid' => $user2->id]));
+        $this->assertCount(0, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user1->id]));
+        $this->assertCount(1, $DB->get_records('aiprovider_birtai_rlimit', ['userid' => $user2->id]));
     }
 
     /**
      * Delete data for users in an approved userlist in a given context.
      *
-     * @covers \aiprovider_datacurso\privacy\provider::delete_data_for_users
+     * @covers \aiprovider_birtai\privacy\provider::delete_data_for_users
      */
     public function test_delete_data_for_users(): void {
-        $component = 'aiprovider_datacurso';
+        $component = 'aiprovider_birtai';
 
         $user1 = $this->getDataGenerator()->create_user();
         $this->create_usage_record($user1->id, 'local_coursegen');
@@ -216,7 +216,7 @@ final class privacy_provider_test extends provider_testcase {
     }
 
     /**
-     * Helper to create a usage record in aiprovider_datacurso_rlimit for a user.
+     * Helper to create a usage record in aiprovider_birtai_rlimit for a user.
      *
      * @param int $userid
      * @param string $serviceid
@@ -234,7 +234,7 @@ final class privacy_provider_test extends provider_testcase {
             'timecreated' => $now,
             'timemodified' => $now,
         ];
-        $rec->id = $DB->insert_record('aiprovider_datacurso_rlimit', $rec);
+        $rec->id = $DB->insert_record('aiprovider_birtai_rlimit', $rec);
         return $rec;
     }
 }

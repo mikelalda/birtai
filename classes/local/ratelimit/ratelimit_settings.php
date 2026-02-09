@@ -17,13 +17,13 @@
 /**
  * Interface for adding per-service ratelimit admin settings.
  *
- * @package     aiprovider_datacurso
+ * @package     aiprovider_birtai
  * @category    admin
- * @copyright   2025 Wilber Narvaez <https://datacurso.com>
+ * @copyright   2025 Wilber Narvaez <https://birtai.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace aiprovider_datacurso\local\ratelimit;
+namespace aiprovider_birtai\local\ratelimit;
 
 /**
  * Contract to contribute ratelimit settings for a given service id.

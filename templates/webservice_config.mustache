@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template aiprovider_datacurso/webservice_config
+    @template aiprovider_birtai/webservice_config
 
     TODO describe template webservice_config
 
@@ -26,15 +26,15 @@
         "webservicesenabled": true,
         "restenabled": true,
         "user": {
-            "username": "datacurso_user",
-            "email": "datacurso@example.com"
+            "username": "birtai_user",
+            "email": "birtai@example.com"
         },
         "role": {
-            "shortname": "datacurso_role",
-            "name": "Datacurso AI Role"
+            "shortname": "birtai_role",
+            "name": "birtai AI Role"
         },
         "service": {
-            "name": "Datacurso AI Service"
+            "name": "birtai AI Service"
         },
         "userassigned": true,
         "tokenexists": true,
@@ -47,59 +47,59 @@
     }
 }}
 
-<div data-region="aiprovider_datacurso/webservice-root">
+<div data-region="aiprovider_birtai/webservice-root">
     <div class="mb-4">
-        <h3>{{#str}} webserviceconfig_heading, aiprovider_datacurso {{/str}}</h3>
-        <p class="text-muted">{{#str}} webserviceconfig_desc, aiprovider_datacurso {{/str}}</p>
+        <h3>{{#str}} webserviceconfig_heading, aiprovider_birtai {{/str}}</h3>
+        <p class="text-muted">{{#str}} webserviceconfig_desc, aiprovider_birtai {{/str}}</p>
     </div>
 
     <!-- Status Overview Card -->
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">{{#str}} webserviceconfig_current, aiprovider_datacurso {{/str}}</h5>
+            <h5 class="mb-0">{{#str}} webserviceconfig_current, aiprovider_birtai {{/str}}</h5>
             {{#isconfigured}}
-                <span class="badge badge-success" data-region="aiprovider_datacurso/header-badge">{{#str}} configured, aiprovider_datacurso{{/str}}</span>
+                <span class="badge badge-success" data-region="aiprovider_birtai/header-badge">{{#str}} configured, aiprovider_birtai{{/str}}</span>
             {{/isconfigured}}
             {{^isconfigured}}
                 {{#retryonly}}
-                    <span class="badge badge-warning" data-region="aiprovider_datacurso/header-badge">{{#str}} needs_repair, aiprovider_datacurso{{/str}}</span>
+                    <span class="badge badge-warning" data-region="aiprovider_birtai/header-badge">{{#str}} needs_repair, aiprovider_birtai{{/str}}</span>
                 {{/retryonly}}
                 {{^retryonly}}
                     {{#registration.lastsent}}
                         {{#needsrepair}}
-                            <span class="badge badge-warning" data-region="aiprovider_datacurso/header-badge">{{#str}} needs_repair, aiprovider_datacurso{{/str}}</span>
+                            <span class="badge badge-warning" data-region="aiprovider_birtai/header-badge">{{#str}} needs_repair, aiprovider_birtai{{/str}}</span>
                         {{/needsrepair}}
                         {{^needsrepair}}
-                            <span class="badge badge-danger" data-region="aiprovider_datacurso/header-badge">{{#str}} not_configured, aiprovider_datacurso{{/str}}</span>
+                            <span class="badge badge-danger" data-region="aiprovider_birtai/header-badge">{{#str}} not_configured, aiprovider_birtai{{/str}}</span>
                         {{/needsrepair}}
                     {{/registration.lastsent}}
                     {{^registration.lastsent}}
-                        <span class="badge badge-danger" data-region="aiprovider_datacurso/header-badge">{{#str}} not_configured, aiprovider_datacurso{{/str}}</span>
+                        <span class="badge badge-danger" data-region="aiprovider_birtai/header-badge">{{#str}} not_configured, aiprovider_birtai{{/str}}</span>
                     {{/registration.lastsent}}
                 {{/retryonly}}
             {{/isconfigured}}
         </div>
         <div class="card-body">
-            {{> aiprovider_datacurso/webservice/status }}
+            {{> aiprovider_birtai/webservice/status }}
 
-            {{> aiprovider_datacurso/webservice/user_role }}
+            {{> aiprovider_birtai/webservice/user_role }}
 
-            {{> aiprovider_datacurso/webservice/service_assignment }}
+            {{> aiprovider_birtai/webservice/service_assignment }}
 
-            {{> aiprovider_datacurso/webservice/token_registration }}
+            {{> aiprovider_birtai/webservice/token_registration }}
         </div>
     </div>
 
     <!-- Action Buttons -->
-    {{> aiprovider_datacurso/webservice/actions }}
+    {{> aiprovider_birtai/webservice/actions }}
 
     <!-- Activity Log -->
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <small class="text-muted">{{#str}} live_log, aiprovider_datacurso{{/str}}</small>
+            <small class="text-muted">{{#str}} live_log, aiprovider_birtai{{/str}}</small>
         </div>
         <div class="card-body">
-            <ul class="list-unstyled mb-0" data-region="aiprovider_datacurso/webservice-log">
+            <ul class="list-unstyled mb-0" data-region="aiprovider_birtai/webservice-log">
                 <!-- Activity log entries will be populated here -->
             </ul>
         </div>

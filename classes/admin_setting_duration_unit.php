@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso;
+namespace aiprovider_birtai;
 
 use admin_setting;
 
@@ -23,7 +23,7 @@ use admin_setting;
  *
  * Stores a JSON string: {"value": <int>, "unit": "hours|days|weeks|months|years"}
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -161,7 +161,7 @@ class admin_setting_duration_unit extends admin_setting {
         foreach ($this->units as $val => $strid) {
             $options[] = [
                 'value' => $val,
-                'name' => get_string($strid, 'aiprovider_datacurso'),
+                'name' => get_string($strid, 'aiprovider_birtai'),
                 'selected' => ($val === $unit),
             ];
         }
@@ -216,7 +216,7 @@ class admin_setting_duration_unit extends admin_setting {
         }
         // Use language string for unit with basic singular/plural.
         $unitkey = $value === 1 ? rtrim($unit, 's') : $unit; // Expects 'hour'/'hours', etc.
-        $unitstr = get_string($unitkey, 'aiprovider_datacurso');
+        $unitstr = get_string($unitkey, 'aiprovider_birtai');
         return trim($value . ' ' . $unitstr);
     }
 }

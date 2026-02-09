@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\external;
+namespace aiprovider_birtai\external;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/externallib.php');
@@ -24,12 +24,12 @@ use external_function_parameters;
 use external_single_structure;
 use external_multiple_structure;
 use external_value;
-use aiprovider_datacurso\httpclient\datacurso_api;
+use aiprovider_birtai\httpclient\birtai_api;
 
 /**
- * External web service to fetch all Datacurso API consumption history.
+ * External web service to fetch all birtai API consumption history.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   external
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -73,9 +73,9 @@ class get_all_consumption extends external_api {
 
         $context = \context_system::instance();
         self::validate_context($context);
-        require_capability('aiprovider/datacurso:viewreports', $context);
+        require_capability('aiprovider/birtai:viewreports', $context);
 
-        $client = new datacurso_api();
+        $client = new birtai_api();
 
         // Step 1. Lightweight request to get pagination info only.
         $queryparams = [
@@ -102,7 +102,7 @@ class get_all_consumption extends external_api {
         if (empty($firstresponse) || $firstresponse['status'] !== 'success') {
             return [
                 'status' => 'error',
-                'message' => get_string('errorinitinformation', 'aiprovider_datacurso'),
+                'message' => get_string('errorinitinformation', 'aiprovider_birtai'),
             ];
         }
 
@@ -129,7 +129,7 @@ class get_all_consumption extends external_api {
             $consumptions = $userdata['consumos'] ?? [];
 
             // Build a map of action names for translation.
-            $actions = \aiprovider_datacurso\provider::get_actions();
+            $actions = \aiprovider_birtai\provider::get_actions();
             $actionmap = [];
             foreach ($actions as $a) {
                 $actionmap[$a['id']] = $a['name'];

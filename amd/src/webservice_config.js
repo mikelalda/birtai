@@ -14,11 +14,11 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * AMD module to handle the Webservice configuration actions for Datacurso.
+ * AMD module to handle the Webservice configuration actions for birtai.
  * It performs setup, token regeneration, and registration calls and
  * displays progress via UI notifications and a simple log list.
  *
- * @module      aiprovider_datacurso/webservice_config
+ * @module      aiprovider_birtai/webservice_config
  * @copyright   2025 Wilber Narvaez <wilber@buendata.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,10 +30,10 @@ import {
   webserviceSetup,
   webserviceRegenerateToken,
   webserviceGetStatus,
-} from "aiprovider_datacurso/repository";
+} from "aiprovider_birtai/repository";
 
 const LOG_REGION_SELECTOR =
-  '[data-region="aiprovider_datacurso/webservice-log"]';
+  '[data-region="aiprovider_birtai/webservice-log"]';
 const logEntries = [];
 
 /**
@@ -41,7 +41,7 @@ const logEntries = [];
  */
 export function init() {
   const root = document.querySelector(
-    '[data-region="aiprovider_datacurso/webservice-root"]'
+    '[data-region="aiprovider_birtai/webservice-root"]'
   );
   if (!root) {
     return;
@@ -58,13 +58,13 @@ function bindHandlers(root) {
     return;
   }
   const btnSetup = root.querySelector(
-    '[data-region="aiprovider_datacurso/webservice-btn-setup"]'
+    '[data-region="aiprovider_birtai/webservice-btn-setup"]'
   );
   const btnRetry = root.querySelector(
-    '[data-region="aiprovider_datacurso/webservice-btn-retry"]'
+    '[data-region="aiprovider_birtai/webservice-btn-retry"]'
   );
   const btnRegenerate = root.querySelector(
-    '[data-region="aiprovider_datacurso/webservice-btn-regenerate"]'
+    '[data-region="aiprovider_birtai/webservice-btn-regenerate"]'
   );
   if (btnSetup) {
     btnSetup.addEventListener("click", setup);
@@ -78,11 +78,11 @@ function bindHandlers(root) {
 }
 
 /**
- * Setup the webservice for Datacurso.
+ * Setup the webservice for birtai.
  */
 async function setup() {
   try {
-    const message = await getString('ws_step_setup', 'aiprovider_datacurso');
+    const message = await getString('ws_step_setup', 'aiprovider_birtai');
     log(message);
     const res = await webserviceSetup();
     if (res.messages && Array.isArray(res.messages)) {
@@ -100,11 +100,11 @@ async function setup() {
 }
 
 /**
- * Retry the webservice setup for Datacurso.
+ * Retry the webservice setup for birtai.
  */
 async function retry() {
     try {
-        const message = await getString('ws_step_token_retry', 'aiprovider_datacurso');
+        const message = await getString('ws_step_token_retry', 'aiprovider_birtai');
         log(message);
         const res = await webserviceSetup();
         res.messages.forEach((m) => log(m));
@@ -120,11 +120,11 @@ async function retry() {
 }
 
 /**
- * Regenerate the webservice token for Datacurso.
+ * Regenerate the webservice token for birtai.
  */
 async function regenerate() {
   try {
-    const message = await getString('ws_step_token_regenerating', 'aiprovider_datacurso');
+    const message = await getString('ws_step_token_regenerating', 'aiprovider_birtai');
     log(message);
     const res = await webserviceRegenerateToken();
     res.messages.forEach((m) => log(m));
@@ -221,13 +221,13 @@ async function refreshStatus() {
  * @param {Object} status
  */
 async function renderAll(status) {
-  const root = document.querySelector('[data-region="aiprovider_datacurso/webservice-root"]');
+  const root = document.querySelector('[data-region="aiprovider_birtai/webservice-root"]');
   if (!root) {
     return;
   }
-  const render = await Templates.renderForPromise('aiprovider_datacurso/webservice_config', status);
+  const render = await Templates.renderForPromise('aiprovider_birtai/webservice_config', status);
   await Templates.replaceNodeContents(root, render.html, render.js);
-  const newRoot = document.querySelector('[data-region="aiprovider_datacurso/webservice-root"]');
+  const newRoot = document.querySelector('[data-region="aiprovider_birtai/webservice-root"]');
   renderLogHistory(newRoot);
   bindHandlers(newRoot);
 }

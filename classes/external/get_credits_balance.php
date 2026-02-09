@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\external;
+namespace aiprovider_birtai\external;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/externallib.php');
@@ -23,12 +23,12 @@ use external_api;
 use external_function_parameters;
 use external_single_structure;
 use external_value;
-use aiprovider_datacurso\httpclient\datacurso_api;
+use aiprovider_birtai\httpclient\birtai_api;
 
 /**
  * Web service to get the credits balance.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -47,8 +47,8 @@ class get_credits_balance extends external_api {
         $params = self::validate_parameters(self::execute_parameters(), []);
         $context = \context_system::instance();
         self::validate_context($context);
-        require_capability('aiprovider/datacurso:viewreports', $context);
-        $client = new datacurso_api();
+        require_capability('aiprovider/birtai:viewreports', $context);
+        $client = new birtai_api();
 
         $response = $client->get('/tokens/saldo');
 
@@ -56,7 +56,7 @@ class get_credits_balance extends external_api {
             return [
                 'status' => 'error',
                 'balance' => 0,
-                'message' => get_string('errorgetbalancecredits', 'aiprovider_datacurso'),
+                'message' => get_string('errorgetbalancecredits', 'aiprovider_birtai'),
             ];
         }
 

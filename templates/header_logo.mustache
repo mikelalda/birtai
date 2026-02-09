@@ -15,24 +15,24 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template aiprovider_datacurso/header_logo
+    @template aiprovider_birtai/header_logo
 
-    Display plugin header with optional Datacurso logo.
+    Display plugin header with optional birtai logo.
 
     Example context (json):
     {
-        "pluginname": "Datacurso AI Provider",
-        "logourl": "https://datacurso.com/logo.png"
+        "pluginname": "birtai AI Provider",
+        "logourl": "https://birtai.com/logo.png"
     }
 }}
 
-<div class="datacurso-header d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
+<div class="birtai-header d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
     {{#pluginname}}
         <h2 class="m-0">{{.}}</h2>
     {{/pluginname}}
     {{#logourl}}
-        <a href="https://datacurso.com/" target="_blank" rel="noopener noreferrer" class="d-flex align-items-center">
-            <img src="{{.}}" alt="{{#str}}alt_datacurso_icon, aiprovider_datacurso{{/str}}" style="height:35px;">
+        <a href="https://birtai.com/" target="_blank" rel="noopener noreferrer" class="d-flex align-items-center">
+            <img src="{{.}}" alt="{{#str}}alt_birtai_icon, aiprovider_birtai{{/str}}" style="height:35px;">
         </a>
     {{/logourl}}
 </div>

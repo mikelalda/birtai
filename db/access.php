@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Capability definitions for the Datacurso AI Provider plugin.
+ * Capability definitions for the birtai AI Provider plugin.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,21 +26,21 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
     // Capability to view AI usage reports and statistics.
-    'aiprovider/datacurso:viewreports' => [
+    'aiprovider/birtai:viewreports' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
             'manager' => CAP_ALLOW,
         ],
     ],
-    'aiprovider/datacurso:configurews' => [
+    'aiprovider/birtai:configurews' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
             'manager' => CAP_ALLOW,
         ],
     ],
-    'aiprovider/datacurso:managetokenlimits' => [
+    'aiprovider/birtai:managetokenlimits' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\output;
+namespace aiprovider_birtai\output;
 
 use renderable;
 use templatable;
@@ -23,7 +23,7 @@ use renderer_base;
 /**
  * Class header_logo
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning <info@industriaelearning.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,8 +36,8 @@ class header_logo implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): array {
         return [
-            'logourl' => $output->image_url('logodatacurso', 'aiprovider_datacurso')->out(false),
-            'pluginname' => get_string('pluginname', 'aiprovider_datacurso'),
+            'logourl' => $output->image_url('logobirtai', 'aiprovider_birtai')->out(false),
+            'pluginname' => get_string('pluginname', 'aiprovider_birtai'),
         ];
     }
 }

@@ -16,18 +16,18 @@
 /**
  * TODO describe module repository
  *
- * @module     aiprovider_datacurso/repository
+ * @module     aiprovider_birtai/repository
  * @copyright  2025 Wilber Narvaez <wilber@buendata.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 import Ajax from 'core/ajax';
 
 /**
- * Setup the webservice for Datacurso.
+ * Setup the webservice for birtai.
  */
 export function webserviceSetup() {
     return Ajax.call([{
-        methodname: 'aiprovider_datacurso_webservice_setup',
+        methodname: 'aiprovider_birtai_webservice_setup',
         args: {}
     }])[0];
 }
@@ -39,38 +39,38 @@ export function webserviceSetup() {
  */
 export function deleteUserTokenLimit(id) {
     return Ajax.call([{
-        methodname: 'aiprovider_datacurso_delete_user_token_limit',
+        methodname: 'aiprovider_birtai_delete_user_token_limit',
         args: {id: Number(id)}
     }])[0];
 }
 
 /**
- * Regenerate the webservice token for Datacurso.
+ * Regenerate the webservice token for birtai.
  */
 export function webserviceRegenerateToken() {
     return Ajax.call([{
-        methodname: 'aiprovider_datacurso_webservice_regenerate_token',
+        methodname: 'aiprovider_birtai_webservice_regenerate_token',
         args: {}
     }])[0];
 }
 
 /**
- * Get current Datacurso webservice status.
+ * Get current birtai webservice status.
  */
 export function webserviceGetStatus() {
     return Ajax.call([{
-        methodname: 'aiprovider_datacurso_webservice_get_status',
+        methodname: 'aiprovider_birtai_webservice_get_status',
         args: {}
     }])[0];
 }
 
 /**
- * Get consumption history for Datacurso.
+ * Get consumption history for birtai.
  * @param {Object} args - The arguments for the consumption history.
  */
 export function getConsumptionHistory(args) {
     return Ajax.call([{
-        methodname: 'aiprovider_datacurso_get_consumption_history',
+        methodname: 'aiprovider_birtai_get_consumption_history',
         args: args
     }])[0];
 }
@@ -82,7 +82,7 @@ export function getConsumptionHistory(args) {
  */
 export function resetUserTokenUsage(id) {
     return Ajax.call([{
-        methodname: 'aiprovider_datacurso_reset_user_token_usage',
+        methodname: 'aiprovider_birtai_reset_user_token_usage',
         args: {id: Number(id)}
     }])[0];
 }

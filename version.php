@@ -17,14 +17,14 @@
 /**
  * Plugin version and other meta-data are defined here.
  *
- * @package     aiprovider_datacurso
- * @copyright   Josue <josue@datacurso.com>
+ * @package     aiprovider_birtai
+ * @copyright   Mikel <maldalur@birt.eus>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'aiprovider_datacurso';
+$plugin->component = 'aiprovider_birtai';
 $plugin->release = '1.0.8';
 $plugin->version = 2026012900;
 $plugin->requires = 2024100700;

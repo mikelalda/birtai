@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\external;
+namespace aiprovider_birtai\external;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -28,7 +28,7 @@ use external_value;
 /**
  * External API class for retrieving AI provider actions.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   external
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -52,8 +52,8 @@ class get_actions extends \external_api {
         $params = self::validate_parameters(self::execute_parameters(), []);
         $context = \context_system::instance();
         self::validate_context($context);
-        require_capability('aiprovider/datacurso:viewreports', $context);
-        $actions = \aiprovider_datacurso\provider::get_actions();
+        require_capability('aiprovider/birtai:viewreports', $context);
+        $actions = \aiprovider_birtai\provider::get_actions();
         return ['actions' => $actions];
     }
 

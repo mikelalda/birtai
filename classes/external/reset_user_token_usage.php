@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\external;
+namespace aiprovider_birtai\external;
 
-use aiprovider_datacurso\local\user_token_limit_manager;
+use aiprovider_birtai\local\user_token_limit_manager;
 use external_api;
 use external_function_parameters;
 use external_single_structure;
@@ -29,9 +29,9 @@ require_once($CFG->libdir . '/externallib.php');
 /**
  * External function to reset usage counters for a user token limit record.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   webservice
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class reset_user_token_usage extends external_api {
@@ -58,21 +58,21 @@ class reset_user_token_usage extends external_api {
 
         $context = \context_system::instance();
         self::validate_context($context);
-        require_capability('aiprovider/datacurso:managetokenlimits', $context);
+        require_capability('aiprovider/birtai:managetokenlimits', $context);
 
         if ($id > 0) {
             $ok = user_token_limit_manager::reset_usage($id);
             if ($ok) {
                 return [
                     'success' => true,
-                    'message' => get_string('usertokenlimit_reset_done', 'aiprovider_datacurso'),
+                    'message' => get_string('usertokenlimit_reset_done', 'aiprovider_birtai'),
                 ];
             }
         }
 
         return [
             'success' => false,
-            'message' => get_string('usertokenlimit_reset_failed', 'aiprovider_datacurso'),
+            'message' => get_string('usertokenlimit_reset_failed', 'aiprovider_birtai'),
         ];
     }
 

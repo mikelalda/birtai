@@ -14,21 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\httpclient;
+namespace aiprovider_birtai\httpclient;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/filelib.php');
 
 /**
- * Class datacurso_api_base
- * Base class for interacting with Datacurso APIs.
+ * Class birtai_api_base
+ * Base class for interacting with birtai APIs.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning <info@industriaelearning.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class datacurso_api_base {
+class birtai_api_base {
     /** Services that depend on the local Moodle webservice. */
     private const SERVICES_REQUIRING_WEBSERVICE = [
         'local_assign_ai',
@@ -36,35 +36,57 @@ class datacurso_api_base {
         'local_dttutor',
     ];
 
-    /** @var string $baseurl The base URL for Datacurso API requests */
+    /** Default license key for local API. */
+    private const DEFAULT_LOCAL_LICENSE = 'moodle-ollama-local';
+
+    /** @var string $baseurl The base URL for birtai API requests */
     protected $baseurl;
 
-    /** @var string|null $licensekey The license key obtained from Datacurso SHOP */
+    /** @var string|null $licensekey The license key obtained from birtai SHOP */
     protected $licensekey;
+
+    /** @var bool $islocalapi Whether we're using local API */
+    protected $islocalapi;
 
     /**
      * Constructor.
      *
-     * @param string $baseurl The base URL for Datacurso API requests.
-     * @param string|null $licensekey The license key obtained from Datacurso SHOP.
+     * @param string $baseurl The base URL for birtai API requests.
+     * @param string|null $licensekey The license key obtained from birtai SHOP.
      */
     public function __construct(string $baseurl, ?string $licensekey = null) {
         $this->baseurl = $baseurl;
-        $this->licensekey = $licensekey ?? get_config('aiprovider_datacurso', 'licensekey');
+        $this->islocalapi = !empty(get_config('aiprovider_birtai', 'use_local_api'));
+
+        // For local API, use default license key if not configured.
+        if ($this->islocalapi) {
+            $this->licensekey = $licensekey ?? get_config('aiprovider_birtai', 'licensekey') ?: self::DEFAULT_LOCAL_LICENSE;
+        } else {
+            $this->licensekey = $licensekey ?? get_config('aiprovider_birtai', 'licensekey');
+        }
     }
 
     /**
-     * Returns the base URL for Datacurso API requests.
+     * Check if we're using local API.
+     *
+     * @return bool True if using local API.
+     */
+    public function is_local_api(): bool {
+        return $this->islocalapi;
+    }
+
+    /**
+     * Returns the base URL for birtai API requests.
      * The URL is trimmed to remove any trailing slashes and a trailing slash is added.
      *
-     * @return string The base URL for Datacurso API requests.
+     * @return string The base URL for birtai API requests.
      */
     public function get_base_url(): string {
         return rtrim($this->baseurl, '/') . '/';
     }
 
     /**
-     * Download a file from Datacurso API.
+     * Download a file from birtai API.
      *
      * @param string $endpoint Relative endpoint (starting with "/").
      * @param string $filename The name of the file to download.
@@ -103,7 +125,7 @@ class datacurso_api_base {
     }
 
     /**
-     * Generic handler for HTTP calls to Datacurso API.
+     * Generic handler for HTTP calls to birtai API.
      *
      * @param string $method HTTP method (GET, POST, PUT, DELETE, UPLOAD).
      * @param string $path   Relative endpoint (starting with "/").
@@ -114,9 +136,11 @@ class datacurso_api_base {
      */
     protected function send_request(string $method, string $path, $payload = [], array $headers = []): ?array {
         global $USER, $CFG;
-        if (empty($this->licensekey)) {
+
+        // For external API, license key is required. For local API, use default if empty.
+        if (empty($this->licensekey) && !$this->islocalapi) {
             debugging('Cannot make this request: invalid license key', DEBUG_DEVELOPER);
-            throw new \moodle_exception('invalidlicensekey', 'aiprovider_datacurso');
+            throw new \moodle_exception('invalidlicensekey', 'aiprovider_birtai');
         }
 
         if (!str_starts_with($path, '/')) {
@@ -125,14 +149,14 @@ class datacurso_api_base {
 
         // Enforce per-user, per-service rate limit using cached DB pre-check.
         // Service could be null if the path is not mapped.
-        $serviceid = \aiprovider_datacurso\local\ratelimiter::resolve_service_for_path($path);
+        $serviceid = \aiprovider_birtai\local\ratelimiter::resolve_service_for_path($path);
         $this->enforce_webservice_requirements($serviceid);
         $userid = (int)($payload['userid'] ?? $USER->id);
-        $ratelimiter = new \aiprovider_datacurso\local\ratelimiter();
+        $ratelimiter = new \aiprovider_birtai\local\ratelimiter();
 
         // Validate if user is allowed to make this request.
         if (!empty($serviceid) && !$ratelimiter->is_user_allowed($serviceid, $userid)) {
-            throw new \moodle_exception('notallowed', 'aiprovider_datacurso');
+            throw new \moodle_exception('notallowed', 'aiprovider_birtai');
         }
 
         // Enforce user global quota (across services) first.
@@ -142,14 +166,14 @@ class datacurso_api_base {
             if (is_array($snapshot) && ($snapshot['limit'] ?? 0) > 0) {
                 $details = $snapshot['used'] . '/' . $snapshot['limit'];
             }
-            throw new \moodle_exception('error_usertokenlimit_exceeded', 'aiprovider_datacurso', '', $details);
+            throw new \moodle_exception('error_usertokenlimit_exceeded', 'aiprovider_birtai', '', $details);
         }
 
         if (!empty($serviceid) && !$ratelimiter->precheck($serviceid, $userid)) {
             $remaining = $ratelimiter->get_time_until_next_window((string)$serviceid, (int)$userid);
             $retrytimestamp = time() + max(0, (int)$remaining);
             $retryat = userdate($retrytimestamp, get_string('strftimedatetime', 'langconfig'));
-            throw new \moodle_exception('error_ratelimit_exceeded', 'aiprovider_datacurso', '', $retryat);
+            throw new \moodle_exception('error_ratelimit_exceeded', 'aiprovider_birtai', '', $retryat);
         }
 
         $curl = new \curl();
@@ -197,13 +221,13 @@ class datacurso_api_base {
         }
 
         if (!$response) {
-            debugging('Empty response from Datacurso API', DEBUG_DEVELOPER);
-            throw new \moodle_exception('emptyresponse', 'aiprovider_datacurso');
+            debugging('Empty response from birtai API', DEBUG_DEVELOPER);
+            throw new \moodle_exception('emptyresponse', 'aiprovider_birtai');
         }
 
         if ($curl->error) {
             debugging('cURL error (' . $curl->error . ')', DEBUG_DEVELOPER);
-            throw new \moodle_exception('curlerror', 'aiprovider_datacurso', '', $curl->error);
+            throw new \moodle_exception('curlerror', 'aiprovider_birtai', '', $curl->error);
         }
 
         $httpcode = $curl->get_info()['http_code'] ?? 0;
@@ -211,26 +235,26 @@ class datacurso_api_base {
             $decodedresponse = json_decode($response, true);
             if ($decodedresponse['detail'] == 'tokens_not_sufficient') {
                 debugging('Not enough tokens to make this request', DEBUG_DEVELOPER);
-                throw new \moodle_exception('notenoughtokens', 'aiprovider_datacurso');
+                throw new \moodle_exception('notenoughtokens', 'aiprovider_birtai');
             }
             if ($decodedresponse['detail'] == 'license_not_allowed') {
                 debugging('License not allowed to make this request', DEBUG_DEVELOPER);
-                throw new \moodle_exception('license_not_allowed', 'aiprovider_datacurso');
+                throw new \moodle_exception('license_not_allowed', 'aiprovider_birtai');
             }
 
-            debugging('Unknown error from Datacurso API', DEBUG_DEVELOPER);
-            throw new \moodle_exception('forbidden', 'aiprovider_datacurso');
+            debugging('Unknown error from birtai API', DEBUG_DEVELOPER);
+            throw new \moodle_exception('forbidden', 'aiprovider_birtai');
         }
 
         if ($httpcode >= 400) {
-            debugging("HTTP error {$httpcode} from Datacurso API: {$response}", DEBUG_DEVELOPER);
-            throw new \moodle_exception('httperror', 'aiprovider_datacurso', '', $httpcode);
+            debugging("HTTP error {$httpcode} from birtai API: {$response}", DEBUG_DEVELOPER);
+            throw new \moodle_exception('httperror', 'aiprovider_birtai', '', $httpcode);
         }
 
         $decodedresponse = json_decode($response, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             debugging('JSON decode error: ' . json_last_error_msg() . '. Response: ' . $response, DEBUG_DEVELOPER);
-            throw new \moodle_exception('jsondecodeerror', 'aiprovider_datacurso', '', json_last_error_msg());
+            throw new \moodle_exception('jsondecodeerror', 'aiprovider_birtai', '', json_last_error_msg());
         }
 
         // Post-success syncs: only after a valid, non-error response.
@@ -287,7 +311,7 @@ class datacurso_api_base {
     }
 
     /**
-     * Ensure the Datacurso webservice is fully configured when required by the service.
+     * Ensure the birtai webservice is fully configured when required by the service.
      *
      * @param string|null $serviceid
      * @return void
@@ -297,10 +321,10 @@ class datacurso_api_base {
             return;
         }
 
-        if (!\aiprovider_datacurso\webservice_config::is_configured()) {
-            $setupurl = \aiprovider_datacurso\webservice_config::get_url();
+        if (!\aiprovider_birtai\webservice_config::is_configured()) {
+            $setupurl = \aiprovider_birtai\webservice_config::get_url();
             $messageparams = (object)['url' => $setupurl->out(false)];
-            throw new \moodle_exception('error_webservice_not_configured', 'aiprovider_datacurso', '', $messageparams);
+            throw new \moodle_exception('error_webservice_not_configured', 'aiprovider_birtai', '', $messageparams);
         }
     }
 
@@ -310,8 +334,8 @@ class datacurso_api_base {
      * @return bool
      */
     public function is_for_ue(): bool {
-        $datacursoapi = new datacurso_api();
-        $response = $datacursoapi->get('tokens/saldo');
+        $birtaiapi = new birtai_api();
+        $response = $birtaiapi->get('tokens/saldo');
         return $response['is_for_eu'] == true;
     }
 }

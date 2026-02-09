@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\httpclient;
+namespace aiprovider_birtai\httpclient;
 
 use moodle_exception;
 use moodle_url;
@@ -25,11 +25,11 @@ require_once($CFG->libdir . '/filelib.php');
 /**
  * HTTP client for Tokens Manager API.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class datacurso_api {
+class birtai_api {
     /** @var string */
     private $baseurl;
 
@@ -42,8 +42,8 @@ class datacurso_api {
      * @throws moodle_exception
      */
     public function __construct() {
-        $this->baseurl    = 'https://shop.datacurso.com/index.php?m=tokens_manager&api=';
-        $this->licensekey = get_config('aiprovider_datacurso', 'licensekey');
+        $this->baseurl    = 'https://shop.birtai.com/index.php?m=tokens_manager&api=';
+        $this->licensekey = get_config('aiprovider_birtai', 'licensekey');
 
         if (empty($this->licensekey)) {
             throw new moodle_exception('API baseurl or licensekey not configured');

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\output;
+namespace aiprovider_birtai\output;
 
 use renderable;
 use templatable;
@@ -26,7 +26,7 @@ use renderer_base;
  * This class provides the context data for the Mustache template
  * used to render the AI consumption page.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   output
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

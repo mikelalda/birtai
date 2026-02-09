@@ -16,8 +16,8 @@
 /**
  * TODO describe module modals
  *
- * @module     aiprovider_datacurso/modals
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @module     aiprovider_birtai/modals
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -46,7 +46,7 @@ const createModalForm = (triggerElement, modalTitle, formClass, formArgs) => {
 };
 
 /**
- * Return Datacurso user token limit modal instance
+ * Return birtai user token limit modal instance
  *
  * @param {EventTarget} triggerElement
  * @param {Promise|string} modalTitle
@@ -59,7 +59,7 @@ export const createUserTokenLimitModal = (triggerElement, modalTitle, id = 0, re
     return createModalForm(
         triggerElement,
         modalTitle,
-        'aiprovider_datacurso\\form\\user_token_limit_form',
+        'aiprovider_birtai\\form\\user_token_limit_form',
         {id, returnurl, userlabel}
     );
 };

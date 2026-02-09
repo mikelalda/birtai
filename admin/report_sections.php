@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Admin report sections for Datacurso AI Provider plugin.
+ * Admin report sections for birtai AI Provider plugin.
  *
  * This file manages the main administrative report sections of the
- * Datacurso AI Provider plugin. It renders tabs for:
+ * birtai AI Provider plugin. It renders tabs for:
  * - AI consumption history
  * - General usage report
  * - Installed plugins list
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   admin
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -34,11 +34,11 @@ require('../../../../config.php');
 // Ensure the user is logged in and has permission to access this page.
 $context = context_system::instance();
 require_login();
-require_capability('aiprovider/datacurso:viewreports', $context);
+require_capability('aiprovider/birtai:viewreports', $context);
 
 // Set up page context and layout.
 $PAGE->set_context($context);
-$PAGE->set_url(new moodle_url('/ai/provider/datacurso/admin/report_sections.php'));
+$PAGE->set_url(new moodle_url('/ai/provider/birtai/admin/report_sections.php'));
 $PAGE->set_pagelayout('report');
 
 // Get the current tab parameter.
@@ -48,27 +48,27 @@ $tab = optional_param('tab', 'consumption', PARAM_ALPHAEXT);
 $tabs = [];
 $tabs[] = new tabobject(
     'consumption',
-    new moodle_url('/ai/provider/datacurso/admin/report_sections.php', ['tab' => 'consumption']),
-    get_string('link_consumptionhistory', 'aiprovider_datacurso')
+    new moodle_url('/ai/provider/birtai/admin/report_sections.php', ['tab' => 'consumption']),
+    get_string('link_consumptionhistory', 'aiprovider_birtai')
 );
 
 $tabs[] = new tabobject(
     'generalreport',
-    new moodle_url('/ai/provider/datacurso/admin/report_sections.php', ['tab' => 'generalreport']),
-    get_string('link_generalreport', 'aiprovider_datacurso')
+    new moodle_url('/ai/provider/birtai/admin/report_sections.php', ['tab' => 'generalreport']),
+    get_string('link_generalreport', 'aiprovider_birtai')
 );
 
 $tabs[] = new tabobject(
     'pluginslist',
-    new moodle_url('/ai/provider/datacurso/admin/report_sections.php', ['tab' => 'pluginslist']),
-    get_string('link_listplugings', 'aiprovider_datacurso')
+    new moodle_url('/ai/provider/birtai/admin/report_sections.php', ['tab' => 'pluginslist']),
+    get_string('link_listplugings', 'aiprovider_birtai')
 );
 
 // Render page header and navigation.
 echo $OUTPUT->header();
 
 // Render custom header logo output.
-$headerlogo = new \aiprovider_datacurso\output\header_logo();
+$headerlogo = new \aiprovider_birtai\output\header_logo();
 echo $OUTPUT->render($headerlogo);
 
 // Render tab navigation.
@@ -78,16 +78,16 @@ echo $OUTPUT->tabtree($tabs, $tab);
 switch ($tab) {
     case 'consumption':
         // Render AI consumption history page.
-        $page = new \aiprovider_datacurso\output\consumption_page();
+        $page = new \aiprovider_birtai\output\consumption_page();
         echo $OUTPUT->render($page);
-        $PAGE->requires->js_call_amd('aiprovider_datacurso/consumption', 'init');
+        $PAGE->requires->js_call_amd('aiprovider_birtai/consumption', 'init');
         break;
 
     case 'generalreport':
         // Render general statistics and charts.
-        $page = new \aiprovider_datacurso\output\report_page();
+        $page = new \aiprovider_birtai\output\report_page();
         echo $OUTPUT->render($page);
-        $PAGE->requires->js_call_amd('aiprovider_datacurso/report_charts', 'init');
+        $PAGE->requires->js_call_amd('aiprovider_birtai/report_charts', 'init');
         break;
 
     case 'pluginslist':
@@ -96,50 +96,50 @@ switch ($tab) {
 
         $pluginslist = [
             [
-                'name' => get_string('pluginname_coursegen', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_coursegen', 'aiprovider_datacurso'),
+                'name' => get_string('pluginname_coursegen', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_coursegen', 'aiprovider_birtai'),
                 'component' => 'local_coursegen',
                 'url' => 'https://moodle.org/plugins/local_coursegen',
             ],
             [
-                'name' => get_string('pluginname_forum_ai', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_forum_ai', 'aiprovider_datacurso'),
+                'name' => get_string('pluginname_forum_ai', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_forum_ai', 'aiprovider_birtai'),
                 'component' => 'local_forum_ai',
                 'url' => 'https://moodle.org/plugins/local_forum_ai',
             ],
             [
-                'name' => get_string('pluginname_datacurso_ratings', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_datacurso_ratings', 'aiprovider_datacurso'),
-                'component' => 'local_datacurso_ratings',
-                'url' => 'https://moodle.org/plugins/local_datacurso_ratings',
+                'name' => get_string('pluginname_birtai_ratings', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_birtai_ratings', 'aiprovider_birtai'),
+                'component' => 'local_birtai_ratings',
+                'url' => 'https://moodle.org/plugins/local_birtai_ratings',
             ],
             [
-                'name' => get_string('pluginname_assign_ai', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_assign_ai', 'aiprovider_datacurso'),
+                'name' => get_string('pluginname_assign_ai', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_assign_ai', 'aiprovider_birtai'),
                 'component' => 'local_assign_ai',
                 'url' => 'https://moodle.org/plugins/local_assign_ai',
             ],
             [
-                'name' => get_string('pluginname_dttutor', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_dttutor', 'aiprovider_datacurso'),
+                'name' => get_string('pluginname_dttutor', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_dttutor', 'aiprovider_birtai'),
                 'component' => 'local_dttutor',
                 'url' => 'https://moodle.org/plugins/local_dttutor',
             ],
             [
-                'name' => get_string('pluginname_socialcert', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_socialcert', 'aiprovider_datacurso'),
+                'name' => get_string('pluginname_socialcert', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_socialcert', 'aiprovider_birtai'),
                 'component' => 'local_socialcert',
                 'url' => 'https://moodle.org/plugins/local_socialcert',
             ],
             [
-                'name' => get_string('pluginname_lifestory', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_lifestory', 'aiprovider_datacurso'),
+                'name' => get_string('pluginname_lifestory', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_lifestory', 'aiprovider_birtai'),
                 'component' => 'report_lifestory',
                 'url' => 'https://moodle.org/plugins/report_lifestory',
             ],
             [
-                'name' => get_string('pluginname_smartrules', 'aiprovider_datacurso'),
-                'description' => get_string('plugindesc_smartrules', 'aiprovider_datacurso'),
+                'name' => get_string('pluginname_smartrules', 'aiprovider_birtai'),
+                'description' => get_string('plugindesc_smartrules', 'aiprovider_birtai'),
                 'component' => 'local_smartrules',
                 'url' => 'https://moodle.org/plugins/local_smartrules',
             ],
@@ -154,7 +154,7 @@ switch ($tab) {
         }
         unset($plugin);
 
-        $page = new \aiprovider_datacurso\output\plugin_list_page($pluginslist);
+        $page = new \aiprovider_birtai\output\plugin_list_page($pluginslist);
         echo $OUTPUT->render($page);
         break;
 }

@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\local;
+namespace aiprovider_birtai\local;
 
 /**
- * Per-user rate limiter for Datacurso services.
+ * Per-user rate limiter for birtai services.
  *
- * @package    aiprovider_datacurso
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @package    aiprovider_birtai
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ratelimiter {
@@ -50,7 +50,7 @@ class ratelimiter {
             return true;
         }
 
-        $settings = get_config('aiprovider_datacurso');
+        $settings = get_config('aiprovider_birtai');
         $coursecreators = $settings->ratelimit_local_coursegen_coursecreators ?? '';
 
         $coursecreators = explode(',', $coursecreators);
@@ -87,7 +87,7 @@ class ratelimiter {
 
         // Read-only fetch of existing record. Do not create on precheck.
         global $DB;
-        $record = $DB->get_record('aiprovider_datacurso_rlimit', [
+        $record = $DB->get_record('aiprovider_birtai_rlimit', [
             'userid' => $userid,
             'serviceid' => $serviceid,
         ]);
@@ -175,11 +175,11 @@ class ratelimiter {
             '/context/' => 'local_coursegen',
             '/assign/' => 'local_assign_ai',
             '/forum/' => 'local_forum_ai',
-            '/rating/' => 'local_datacurso_ratings',
+            '/rating/' => 'local_birtai_ratings',
             '/certificate/' => 'local_socialcert',
             '/story/' => 'report_lifestory',
             '/smartrules/' => 'local_coursedynamicrules',
-            '/provider/' => 'aiprovider_datacurso',
+            '/provider/' => 'aiprovider_birtai',
             '/chat/' => 'local_dttutor',
         ];
 
@@ -199,7 +199,7 @@ class ratelimiter {
      * @return bool True when the rate limit is enabled, false otherwise.
      */
     private function is_rate_limit_enabled(string $serviceid): bool {
-        $value = get_config('aiprovider_datacurso', "ratelimit_{$serviceid}_enable");
+        $value = get_config('aiprovider_birtai', "ratelimit_{$serviceid}_enable");
         return (int)$value === 1;
     }
 
@@ -210,7 +210,7 @@ class ratelimiter {
      * @return bool True when the user restriction is enabled, false otherwise.
      */
     private function is_user_restriction_enabled(string $serviceid): bool {
-        $value = get_config('aiprovider_datacurso', "ratelimit_{$serviceid}_allowedusers_enable");
+        $value = get_config('aiprovider_birtai', "ratelimit_{$serviceid}_allowedusers_enable");
         return (int)$value === 1;
     }
 
@@ -221,7 +221,7 @@ class ratelimiter {
      * @return int
      */
     private function get_service_limit(string $serviceid): int {
-        $value = get_config('aiprovider_datacurso', "ratelimit_{$serviceid}_limit");
+        $value = get_config('aiprovider_birtai', "ratelimit_{$serviceid}_limit");
         return (int)$value;
     }
 
@@ -232,7 +232,7 @@ class ratelimiter {
      * @return int
      */
     private function get_window_length_in_seconds(string $serviceid): int {
-        $json = (string)get_config('aiprovider_datacurso', "ratelimit_{$serviceid}_window");
+        $json = (string)get_config('aiprovider_birtai', "ratelimit_{$serviceid}_window");
 
         $data = json_decode($json, true);
         if (!is_array($data)) {
@@ -277,7 +277,7 @@ class ratelimiter {
     private function load_usage_record(int $userid, string $serviceid, int $windowstart): \stdClass {
         global $DB;
 
-        $record = $DB->get_record('aiprovider_datacurso_rlimit', [
+        $record = $DB->get_record('aiprovider_birtai_rlimit', [
             'userid' => $userid,
             'serviceid' => $serviceid,
         ]);
@@ -287,7 +287,7 @@ class ratelimiter {
         }
 
         $record = $this->create_usage_record($userid, $serviceid, $windowstart);
-        $record->id = $DB->insert_record('aiprovider_datacurso_rlimit', $record);
+        $record->id = $DB->insert_record('aiprovider_birtai_rlimit', $record);
 
         return $record;
     }
@@ -331,7 +331,7 @@ class ratelimiter {
         $record->lastsync = $now;
         $record->timemodified = $now;
 
-        $DB->update_record('aiprovider_datacurso_rlimit', $record);
+        $DB->update_record('aiprovider_birtai_rlimit', $record);
     }
 
     /**
@@ -356,7 +356,7 @@ class ratelimiter {
         $currenttime = time();
 
         global $DB;
-        $record = $DB->get_record('aiprovider_datacurso_rlimit', [
+        $record = $DB->get_record('aiprovider_birtai_rlimit', [
             'userid' => $userid,
             'serviceid' => $serviceid,
         ]);
@@ -393,7 +393,7 @@ class ratelimiter {
         ?string $actionpath
     ): int {
         $servicename = $this->get_service_display_name($serviceid);
-        $client = new \aiprovider_datacurso\httpclient\datacurso_api();
+        $client = new \aiprovider_birtai\httpclient\birtai_api();
 
         return $this->fetch_tokens_for_service(
             $client,
@@ -409,7 +409,7 @@ class ratelimiter {
     /**
      * Fetch tokens for the service within the requested window.
      *
-     * @param \aiprovider_datacurso\httpclient\datacurso_api $client HTTP client used for the request.
+     * @param \aiprovider_birtai\httpclient\birtai_api $client HTTP client used for the request.
      * @param int $userid User identifier to filter by.
      * @param string $serviceid Service identifier to filter consumptions.
      * @param string|null $servicename Optional human-readable service name.
@@ -419,7 +419,7 @@ class ratelimiter {
      * @return int Total tokens consumed within the window.
      */
     private function fetch_tokens_for_service(
-        \aiprovider_datacurso\httpclient\datacurso_api $client,
+        \aiprovider_birtai\httpclient\birtai_api $client,
         int $userid,
         string $serviceid,
         ?string $servicename,
@@ -481,7 +481,7 @@ class ratelimiter {
     /**
      * Invoke the remote API with the selected filters.
      *
-     * @param \aiprovider_datacurso\httpclient\datacurso_api $client HTTP client used for the call.
+     * @param \aiprovider_birtai\httpclient\birtai_api $client HTTP client used for the call.
      * @param int $userid User identifier to query.
      * @param string $serviceid Service identifier to query.
      * @param string|null $actionfilter Optional action path filter.
@@ -492,7 +492,7 @@ class ratelimiter {
      * @return array|null API response payload or null on failure.
      */
     private function request_consumption_page(
-        \aiprovider_datacurso\httpclient\datacurso_api $client,
+        \aiprovider_birtai\httpclient\birtai_api $client,
         int $userid,
         string $serviceid,
         ?string $actionfilter,
@@ -729,7 +729,7 @@ class ratelimiter {
      * @return string|null
      */
     private function get_service_display_name(string $serviceid): ?string {
-        $services = \aiprovider_datacurso\provider::get_services();
+        $services = \aiprovider_birtai\provider::get_services();
         foreach ($services as $service) {
             if (($service['id'] ?? '') === $serviceid) {
                 return $service['name'] ?? null;
@@ -790,7 +790,7 @@ class ratelimiter {
     }
 
     /**
-     * Check if the user has remaining quota in the aiprovider_datacurso_userlimit table.
+     * Check if the user has remaining quota in the aiprovider_birtai_userlimit table.
      * Missing record or non-positive limit means unlimited (allowed).
      *
      * @param int $userid
@@ -799,7 +799,7 @@ class ratelimiter {
     public function precheck_user_quota(int $userid): bool {
         global $DB;
 
-        $record = $DB->get_record('aiprovider_datacurso_userlimit', ['userid' => $userid]);
+        $record = $DB->get_record('aiprovider_birtai_userlimit', ['userid' => $userid]);
         if (!$record) {
             return true;
         }
@@ -821,7 +821,7 @@ class ratelimiter {
      */
     public function get_user_quota_snapshot(int $userid): ?array {
         global $DB;
-        $record = $DB->get_record('aiprovider_datacurso_userlimit', ['userid' => $userid]);
+        $record = $DB->get_record('aiprovider_birtai_userlimit', ['userid' => $userid]);
         if (!$record) {
             return null;
         }
@@ -846,7 +846,7 @@ class ratelimiter {
     public function sync_user_quota_after_success(int $userid, ?string $actionpath = null): void {
         global $DB;
 
-        $record = $DB->get_record('aiprovider_datacurso_userlimit', ['userid' => $userid]);
+        $record = $DB->get_record('aiprovider_birtai_userlimit', ['userid' => $userid]);
         if (!$record) {
             return; // No quota set; nothing to sync.
         }
@@ -864,7 +864,7 @@ class ratelimiter {
         $record->tokensused = $tokensused;
         $record->lastsync = $now;
         $record->timemodified = $now;
-        $DB->update_record('aiprovider_datacurso_userlimit', $record);
+        $DB->update_record('aiprovider_birtai_userlimit', $record);
     }
 
     /**
@@ -877,7 +877,7 @@ class ratelimiter {
      * @return int
      */
     private function get_user_tokens_since(int $userid, int $from, int $to, ?string $actionpath = null): int {
-        $client = new \aiprovider_datacurso\httpclient\datacurso_api();
+        $client = new \aiprovider_birtai\httpclient\birtai_api();
 
         $page = 1;
         $limit = 100;

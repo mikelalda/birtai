@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\form;
+namespace aiprovider_birtai\form;
 
 defined('MOODLE_INTERNAL') || die();
 
-use aiprovider_datacurso\local\user_token_limit_manager;
+use aiprovider_birtai\local\user_token_limit_manager;
 use context_system;
 use core_form\dynamic_form;
 use moodle_url;
@@ -28,7 +28,7 @@ require_once($CFG->libdir . '/formslib.php');
 /**
  * Form to create or edit per-user token limits.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -48,10 +48,10 @@ class user_token_limit_form extends dynamic_form {
             $mform->addElement(
                 'static',
                 'userlabel',
-                get_string('usertokenlimit_user', 'aiprovider_datacurso'),
+                get_string('usertokenlimit_user', 'aiprovider_birtai'),
                 format_string($userlabel)
             );
-            $mform->addHelpButton('userlabel', 'usertokenlimit_user_readonly', 'aiprovider_datacurso');
+            $mform->addHelpButton('userlabel', 'usertokenlimit_user_readonly', 'aiprovider_birtai');
             $mform->addElement('hidden', 'userid');
             $mform->setType('userid', PARAM_INT);
         } else {
@@ -61,14 +61,14 @@ class user_token_limit_form extends dynamic_form {
                 'placeholder' => get_string('search'),
                 'noselectionstring' => get_string('noselection', 'form'),
             ];
-            $mform->addElement('autocomplete', 'userid', get_string('usertokenlimit_user', 'aiprovider_datacurso'), [], $options);
-            $mform->addHelpButton('userid', 'usertokenlimit_user', 'aiprovider_datacurso');
+            $mform->addElement('autocomplete', 'userid', get_string('usertokenlimit_user', 'aiprovider_birtai'), [], $options);
+            $mform->addHelpButton('userid', 'usertokenlimit_user', 'aiprovider_birtai');
             $mform->addRule('userid', get_string('required'), 'required', null, 'client');
             $mform->setType('userid', PARAM_INT);
         }
 
-        $mform->addElement('text', 'tokenlimit', get_string('usertokenlimit_limit', 'aiprovider_datacurso'));
-        $mform->addHelpButton('tokenlimit', 'usertokenlimit_limit', 'aiprovider_datacurso');
+        $mform->addElement('text', 'tokenlimit', get_string('usertokenlimit_limit', 'aiprovider_birtai'));
+        $mform->addHelpButton('tokenlimit', 'usertokenlimit_limit', 'aiprovider_birtai');
         $mform->setType('tokenlimit', PARAM_INT);
         $mform->addRule('tokenlimit', get_string('required'), 'required', null, 'client');
         $mform->addRule('tokenlimit', null, 'numeric', null, 'client');
@@ -85,7 +85,7 @@ class user_token_limit_form extends dynamic_form {
      */
     protected function check_access_for_dynamic_submission(): void {
         $context = context_system::instance();
-        require_capability('aiprovider/datacurso:managetokenlimits', $context);
+        require_capability('aiprovider/birtai:managetokenlimits', $context);
     }
 
     /**
@@ -103,7 +103,7 @@ class user_token_limit_form extends dynamic_form {
         if (!empty($returnurl)) {
             return new moodle_url($returnurl);
         }
-        return new moodle_url('/ai/provider/datacurso/admin/user_token_limits.php');
+        return new moodle_url('/ai/provider/birtai/admin/user_token_limits.php');
     }
 
     /**
@@ -136,7 +136,7 @@ class user_token_limit_form extends dynamic_form {
 
         $returnurl = !empty($data->returnurl)
             ? new moodle_url($data->returnurl)
-            : new moodle_url('/ai/provider/datacurso/admin/user_token_limits.php');
+            : new moodle_url('/ai/provider/birtai/admin/user_token_limits.php');
         return $returnurl->out(false);
     }
 
@@ -152,7 +152,7 @@ class user_token_limit_form extends dynamic_form {
 
         $tokenlimit = (int)($data['tokenlimit'] ?? 0);
         if ($tokenlimit <= 0) {
-            $errors['tokenlimit'] = get_string('usertokenlimit_limit_invalid', 'aiprovider_datacurso');
+            $errors['tokenlimit'] = get_string('usertokenlimit_limit_invalid', 'aiprovider_birtai');
         }
 
         if (empty($data['id']) && empty($data['userid'])) {

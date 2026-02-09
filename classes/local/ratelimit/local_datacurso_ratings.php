@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\local\ratelimit;
+namespace aiprovider_birtai\local\ratelimit;
 
 use admin_settingpage;
 use core_admin\local\settings\autocomplete;
@@ -23,15 +23,15 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/user/lib.php');
 
 /**
- * Class local_datacurso_ratings
+ * Class local_birtai_ratings
  *
- * @package    aiprovider_datacurso
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @package    aiprovider_birtai
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_datacurso_ratings extends ratelimit_settings {
+class local_birtai_ratings extends ratelimit_settings {
     /** @var string Plugin component name. */
-    private const PLUGIN = 'aiprovider_datacurso';
+    private const PLUGIN = 'aiprovider_birtai';
 
     /**
      * Add the rate limit settings related to ratings analysis with AI.
@@ -45,8 +45,8 @@ class local_datacurso_ratings extends ratelimit_settings {
         // Checkbox to enable limiting by allowed users list.
         $allowedusersenable = new \admin_setting_configcheckbox(
             "{$configprefix}_allowedusers_enable",
-            new \lang_string('ratelimit_local_datacurso_ratings_allowedusers_enable', self::PLUGIN),
-            new \lang_string('ratelimit_local_datacurso_ratings_allowedusers_enable_desc', self::PLUGIN),
+            new \lang_string('ratelimit_local_birtai_ratings_allowedusers_enable', self::PLUGIN),
+            new \lang_string('ratelimit_local_birtai_ratings_allowedusers_enable_desc', self::PLUGIN),
             0
         );
         $settings->add($allowedusersenable);
@@ -55,13 +55,13 @@ class local_datacurso_ratings extends ratelimit_settings {
 
         // Course analysis generators.
         $coursechoices = $this->get_user_choices([
-            'local/datacurso_ratings:generateanalysiscourse',
-            'local/datacurso_ratings:generateanalysisactivity',
+            'local/birtai_ratings:generateanalysiscourse',
+            'local/birtai_ratings:generateanalysisactivity',
         ]);
         $courseanalysts = new autocomplete(
             "{$configprefix}_courseanalysts",
-            new \lang_string('ratelimit_local_datacurso_ratings_courseanalysts', self::PLUGIN),
-            new \lang_string('ratelimit_local_datacurso_ratings_courseanalysts_desc', self::PLUGIN),
+            new \lang_string('ratelimit_local_birtai_ratings_courseanalysts', self::PLUGIN),
+            new \lang_string('ratelimit_local_birtai_ratings_courseanalysts_desc', self::PLUGIN),
             [],
             $coursechoices,
             $attributes
@@ -71,12 +71,12 @@ class local_datacurso_ratings extends ratelimit_settings {
 
         // General analysis generators.
         $generalchoices = $this->get_user_choices([
-            'local/datacurso_ratings:generateanalysisgeneral',
+            'local/birtai_ratings:generateanalysisgeneral',
         ]);
         $generalanalysts = new autocomplete(
             "{$configprefix}_generalanalysts",
-            new \lang_string('ratelimit_local_datacurso_ratings_generalanalysts', self::PLUGIN),
-            new \lang_string('ratelimit_local_datacurso_ratings_generalanalysts_desc', self::PLUGIN),
+            new \lang_string('ratelimit_local_birtai_ratings_generalanalysts', self::PLUGIN),
+            new \lang_string('ratelimit_local_birtai_ratings_generalanalysts_desc', self::PLUGIN),
             [],
             $generalchoices,
             $attributes

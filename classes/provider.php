@@ -14,25 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso;
+namespace aiprovider_birtai;
 
 use core_ai\aiactions;
 
 /**
- * Provider class for DataCurso AI integration.
- * @package    aiprovider_datacurso
+ * Provider class for birtai AI integration.
+ * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider extends \core_ai\provider {
-    /** @var mixed License key for Datacurso API. */
+    /** @var mixed License key for birtai API. */
     private mixed $licensekey;
 
     /**
      * Builder.
      */
     public function __construct() {
-        $this->licensekey = get_config('aiprovider_datacurso', 'licensekey');
+        $this->licensekey = get_config('aiprovider_birtai', 'licensekey');
     }
 
     /**
@@ -54,6 +54,11 @@ class provider extends \core_ai\provider {
      * @return bool
      */
     public function is_provider_configured(): bool {
+        // If using local API, consider it configured even without a license key.
+        $uselocalapi = get_config('aiprovider_birtai', 'use_local_api');
+        if (!empty($uselocalapi)) {
+            return true;
+        }
         return !empty($this->licensekey);
     }
 
@@ -99,9 +104,9 @@ class provider extends \core_ai\provider {
         // Settings for generate_text and summarise_text actions.
         if ($actionname === 'generate_text' || $actionname === 'summarise_text') {
             $settings[] = new \admin_setting_configtextarea(
-                "aiprovider_datacurso/action_{$actionname}_instruction",
-                new \lang_string("action:{$actionname}:instruction", 'aiprovider_datacurso'),
-                new \lang_string("action:{$actionname}:instruction_desc", 'aiprovider_datacurso'),
+                "aiprovider_birtai/action_{$actionname}_instruction",
+                new \lang_string("action:{$actionname}:instruction", 'aiprovider_birtai'),
+                new \lang_string("action:{$actionname}:instruction_desc", 'aiprovider_birtai'),
                 $action::get_system_instruction(),
                 PARAM_TEXT
             );
@@ -117,15 +122,15 @@ class provider extends \core_ai\provider {
      */
     public static function get_services(): array {
         return [
-            ['id' => 'local_coursegen', 'name' => get_string('pluginname_coursegen', 'aiprovider_datacurso')],
-            ['id' => 'local_datacurso_ratings', 'name' => get_string('pluginname_datacurso_ratings', 'aiprovider_datacurso')],
-            ['id' => 'local_forum_ai', 'name' => get_string('pluginname_forum_ai', 'aiprovider_datacurso')],
-            ['id' => 'local_assign_ai', 'name' => get_string('pluginname_assign_ai', 'aiprovider_datacurso')],
-            ['id' => 'aiprovider_datacurso', 'name' => get_string('pluginname', 'aiprovider_datacurso')],
-            ['id' => 'local_dttutor', 'name' => get_string('pluginname_dttutor', 'aiprovider_datacurso')],
-            ['id' => 'local_socialcert', 'name' => get_string('pluginname_socialcert', 'aiprovider_datacurso')],
-            ['id' => 'report_lifestory', 'name' => get_string('pluginname_lifestory', 'aiprovider_datacurso')],
-            ['id' => 'local_coursedynamicrules', 'name' => get_string('pluginname_smartrules', 'aiprovider_datacurso')],
+            ['id' => 'local_coursegen', 'name' => get_string('pluginname_coursegen', 'aiprovider_birtai')],
+            ['id' => 'local_birtai_ratings', 'name' => get_string('pluginname_birtai_ratings', 'aiprovider_birtai')],
+            ['id' => 'local_forum_ai', 'name' => get_string('pluginname_forum_ai', 'aiprovider_birtai')],
+            ['id' => 'local_assign_ai', 'name' => get_string('pluginname_assign_ai', 'aiprovider_birtai')],
+            ['id' => 'aiprovider_birtai', 'name' => get_string('pluginname', 'aiprovider_birtai')],
+            ['id' => 'local_dttutor', 'name' => get_string('pluginname_dttutor', 'aiprovider_birtai')],
+            ['id' => 'local_socialcert', 'name' => get_string('pluginname_socialcert', 'aiprovider_birtai')],
+            ['id' => 'report_lifestory', 'name' => get_string('pluginname_lifestory', 'aiprovider_birtai')],
+            ['id' => 'local_coursedynamicrules', 'name' => get_string('pluginname_smartrules', 'aiprovider_birtai')],
         ];
     }
 
@@ -136,23 +141,23 @@ class provider extends \core_ai\provider {
      */
     public static function get_actions(): array {
         return [
-            ['id' => '/provider/chat/completions', 'name' => get_string('generate_text', 'aiprovider_datacurso')],
-            ['id' => '/provider/images/generations', 'name' => get_string('generate_image', 'aiprovider_datacurso')],
-            ['id' => '/course/execute', 'name' => get_string('generate_creation_course', 'aiprovider_datacurso')],
-            ['id' => '/course/start', 'name' => get_string('generate_plan_course', 'aiprovider_datacurso')],
-            ['id' => '/resources/create-mod', 'name' => get_string('generate_activitie', 'aiprovider_datacurso')],
-            ['id' => '/assign/answer', 'name' => get_string('generate_assign_answer', 'aiprovider_datacurso')],
-            ['id' => '/forum/chat', 'name' => get_string('generate_forum_chat', 'aiprovider_datacurso')],
-            ['id' => '/rating/general', 'name' => get_string('generate_analysis_general', 'aiprovider_datacurso')],
-            ['id' => '/rating/course', 'name' => get_string('generate_analysis_course', 'aiprovider_datacurso')],
-            ['id' => '/rating/query', 'name' => get_string('generate_analysis_comments', 'aiprovider_datacurso')],
-            ['id' => '/context/upload', 'name' => get_string('read_context_course', 'aiprovider_datacurso')],
-            ['id' => '/context/upload-model-context', 'name' => get_string('read_context_course_model', 'aiprovider_datacurso')],
-            ['id' => '/resources/create-mod/stream', 'name' => get_string('generate_activitie', 'aiprovider_datacurso')],
-            ['id' => '/certificate/answer', 'name' => get_string('generate_certificate_answer', 'aiprovider_datacurso')],
-            ['id' => '/story/analysis', 'name' => get_string('generate_analysis_story_student', 'aiprovider_datacurso')],
-            ['id' => '/smartrules/create-mod', 'name' => get_string('generate_ai_reinforcement_activity', 'aiprovider_datacurso')],
-            ['id' => '/chat/message', 'name' => get_string('generate_chat_message', 'aiprovider_datacurso')],
+            ['id' => '/provider/chat/completions', 'name' => get_string('generate_text', 'aiprovider_birtai')],
+            ['id' => '/provider/images/generations', 'name' => get_string('generate_image', 'aiprovider_birtai')],
+            ['id' => '/course/execute', 'name' => get_string('generate_creation_course', 'aiprovider_birtai')],
+            ['id' => '/course/start', 'name' => get_string('generate_plan_course', 'aiprovider_birtai')],
+            ['id' => '/resources/create-mod', 'name' => get_string('generate_activitie', 'aiprovider_birtai')],
+            ['id' => '/assign/answer', 'name' => get_string('generate_assign_answer', 'aiprovider_birtai')],
+            ['id' => '/forum/chat', 'name' => get_string('generate_forum_chat', 'aiprovider_birtai')],
+            ['id' => '/rating/general', 'name' => get_string('generate_analysis_general', 'aiprovider_birtai')],
+            ['id' => '/rating/course', 'name' => get_string('generate_analysis_course', 'aiprovider_birtai')],
+            ['id' => '/rating/query', 'name' => get_string('generate_analysis_comments', 'aiprovider_birtai')],
+            ['id' => '/context/upload', 'name' => get_string('read_context_course', 'aiprovider_birtai')],
+            ['id' => '/context/upload-model-context', 'name' => get_string('read_context_course_model', 'aiprovider_birtai')],
+            ['id' => '/resources/create-mod/stream', 'name' => get_string('generate_activitie', 'aiprovider_birtai')],
+            ['id' => '/certificate/answer', 'name' => get_string('generate_certificate_answer', 'aiprovider_birtai')],
+            ['id' => '/story/analysis', 'name' => get_string('generate_analysis_story_student', 'aiprovider_birtai')],
+            ['id' => '/smartrules/create-mod', 'name' => get_string('generate_ai_reinforcement_activity', 'aiprovider_birtai')],
+            ['id' => '/chat/message', 'name' => get_string('generate_chat_message', 'aiprovider_birtai')],
         ];
     }
 }

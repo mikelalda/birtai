@@ -15,14 +15,14 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template aiprovider_datacurso/user_token_limits
+    @template aiprovider_birtai/user_token_limits
 
     TODO describe template user_token_limits
 
     Example context (json):
     {
-        "addurl": "https://example.com/ai/provider/datacurso/admin/user_token_limit_edit.php",
-        "searchaction": "https://example.com/ai/provider/datacurso/admin/user_token_limits.php",
+        "addurl": "https://example.com/ai/provider/birtai/admin/user_token_limit_edit.php",
+        "searchaction": "https://example.com/ai/provider/birtai/admin/user_token_limits.php",
         "searchvalue": "",
         "sort": "email",
         "dir": "ASC",
@@ -42,9 +42,9 @@
         "pagingbar": "<div class=\"paging\">...</div>"
     }
 }}
-<div class="aiprovider-datacurso-userlimits" data-region="aiprovider-datacurso-userlimits">
+<div class="aiprovider-birtai-userlimits" data-region="aiprovider-birtai-userlimits">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="{{addurl}}" class="btn btn-primary" data-action="openadd">{{#str}} usertokenlimit_add, aiprovider_datacurso {{/str}}</a>
+        <a href="{{addurl}}" class="btn btn-primary" data-action="openadd">{{#str}} usertokenlimit_add, aiprovider_birtai {{/str}}</a>
         <form method="get" action="{{searchaction}}" class="form-inline ml-2">
             <label for="id_search" class="sr-only">{{#str}} search {{/str}}</label>
             <input type="text" id="id_search" name="search" value="{{searchvalue}}" class="form-control" placeholder="{{#str}} search {{/str}}">
@@ -91,8 +91,8 @@
                         <td>
                             <span>{{tokensused}}</span>
                             {{#canreset}}
-                            <a href="#" class="action-icon ml-1" data-action="resetusage" data-id="{{id}}" data-username="{{fullname}}" title="{{#str}} usertokenlimit_reset_usage, aiprovider_datacurso {{/str}}">
-                                {{#pix}} i/reload, core, {{#str}} usertokenlimit_reset_usage, aiprovider_datacurso {{/str}} {{/pix}}
+                            <a href="#" class="action-icon ml-1" data-action="resetusage" data-id="{{id}}" data-username="{{fullname}}" title="{{#str}} usertokenlimit_reset_usage, aiprovider_birtai {{/str}}">
+                                {{#pix}} i/reload, core, {{#str}} usertokenlimit_reset_usage, aiprovider_birtai {{/str}} {{/pix}}
                             </a>
                             {{/canreset}}
                         </td>

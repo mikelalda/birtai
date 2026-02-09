@@ -16,7 +16,7 @@
 /**
  * Report charts module.
  *
- * @module     aiprovider_datacurso/report_charts
+ * @module     aiprovider_birtai/report_charts
  * @copyright  2025 Industria Elearning
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,9 +29,9 @@ import Notification from 'core/notification';
 export const init = async () => {
 
     const date = await getString('date', 'core');
-    const creditsConsumedMonth = await getString('tokensconsumedmonth', 'aiprovider_datacurso');
-    const creditsConsumedDay = await getString('tokensconsumedday', 'aiprovider_datacurso');
-    const creditsConsumed = await getString('tokensconsumed', 'aiprovider_datacurso');
+    const creditsConsumedMonth = await getString('tokensconsumedmonth', 'aiprovider_birtai');
+    const creditsConsumedDay = await getString('tokensconsumedday', 'aiprovider_birtai');
+    const creditsConsumed = await getString('tokensconsumed', 'aiprovider_birtai');
 
     const tokensAvailable = document.getElementById('tokens-available');
     const tokensConsumed = document.getElementById('tokens-consumed');
@@ -40,9 +40,9 @@ export const init = async () => {
     let cachedData = [];
 
     Promise.all([
-        Ajax.call([{ methodname: 'aiprovider_datacurso_get_credits_balance', args: {} }])[0],
-        Ajax.call([{ methodname: 'aiprovider_datacurso_get_services', args: {} }])[0],
-        Ajax.call([{ methodname: 'aiprovider_datacurso_get_all_consumption', args: {} }])[0],
+        Ajax.call([{ methodname: 'aiprovider_birtai_get_credits_balance', args: {} }])[0],
+        Ajax.call([{ methodname: 'aiprovider_birtai_get_services', args: {} }])[0],
+        Ajax.call([{ methodname: 'aiprovider_birtai_get_all_consumption', args: {} }])[0],
     ])
         .then(([balanceResponse, servicesResponse, consumptionResponse]) => {
             const balance = balanceResponse?.balance || 0;
@@ -98,7 +98,7 @@ export const init = async () => {
 
         try {
             const response = await Ajax.call([{
-                methodname: 'aiprovider_datacurso_get_all_consumption',
+                methodname: 'aiprovider_birtai_get_all_consumption',
                 args: finalParams
             }])[0];
 

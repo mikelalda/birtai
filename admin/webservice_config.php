@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Webservice configuration page for Datacurso AI provider.
+ * Webservice configuration page for birtai AI provider.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @copyright  2025 Wilber Narvaez
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,21 +25,21 @@
 require('../../../../config.php');
 
 require_login();
-require_capability('aiprovider/datacurso:configurews', context_system::instance());
+require_capability('aiprovider/birtai:configurews', context_system::instance());
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url(new moodle_url('/ai/provider/datacurso/admin/webservice_config.php'));
+$PAGE->set_url(new moodle_url('/ai/provider/birtai/admin/webservice_config.php'));
 $PAGE->set_pagelayout('admin');
-$PAGE->set_title(get_string('webserviceconfig_title', 'aiprovider_datacurso'));
-$PAGE->set_heading(get_string('webserviceconfig_title', 'aiprovider_datacurso'));
+$PAGE->set_title(get_string('webserviceconfig_title', 'aiprovider_birtai'));
+$PAGE->set_heading(get_string('webserviceconfig_title', 'aiprovider_birtai'));
 
 // Initial status for page render.
-$status = \aiprovider_datacurso\webservice_config::get_status();
+$status = \aiprovider_birtai\webservice_config::get_status();
 
 echo $OUTPUT->header();
 
-$PAGE->requires->js_call_amd('aiprovider_datacurso/webservice_config', 'init');
+$PAGE->requires->js_call_amd('aiprovider_birtai/webservice_config', 'init');
 
-echo $OUTPUT->render_from_template('aiprovider_datacurso/webservice_config', $status);
+echo $OUTPUT->render_from_template('aiprovider_birtai/webservice_config', $status);
 
 echo $OUTPUT->footer();

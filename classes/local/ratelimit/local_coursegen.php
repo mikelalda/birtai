@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\local\ratelimit;
+namespace aiprovider_birtai\local\ratelimit;
 
 use admin_settingpage;
 use core_admin\local\settings\autocomplete;
@@ -25,13 +25,13 @@ require_once($CFG->dirroot . '/user/lib.php');
 /**
  * Class local_coursegen
  *
- * @package    aiprovider_datacurso
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @package    aiprovider_birtai
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_coursegen extends ratelimit_settings {
     /** @var string Plugin component name. */
-    private const PLUGIN = 'aiprovider_datacurso';
+    private const PLUGIN = 'aiprovider_birtai';
 
     /**
      * Add the rate limit settings related to course generation.

@@ -16,8 +16,8 @@
 **Compatibility note:** This version is compatible **from Moodle 4.5 to Moodle 5.1**.
 
 ## Added
-- **Configurable base URLs for DataCurso AI services**  
-  Added support for configurable base URLs for both the **standard** and **EU-hosted** DataCurso AI services, allowing greater flexibility across environments.
+- **Configurable base URLs for birtai AI services**  
+  Added support for configurable base URLs for both the **standard** and **EU-hosted** birtai AI services, allowing greater flexibility across environments.
 - **Optional base URL parameters in constructors**  
   Updated service constructors to accept optional base URL parameters, enabling explicit overrides when needed.
 
@@ -62,7 +62,7 @@ Updated the plugin version and release metadata to **1.0.6** to reflect the incl
 
 ## Fixed
 - **Upgrade savepoint order corrected**  
-  Reordered the upgrade savepoint to prevent upgrade failures related to the `aiprovider_datacurso_userlimit`
+  Reordered the upgrade savepoint to prevent upgrade failures related to the `aiprovider_birtai_userlimit`
 
 ## 1.0.4
 

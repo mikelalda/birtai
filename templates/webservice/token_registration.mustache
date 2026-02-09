@@ -18,7 +18,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-  @template aiprovider_datacurso/webservice/token_registration
+  @template aiprovider_birtai/webservice/token_registration
   Renders token existence/created info and registration status block.
 
   Example context (json):
@@ -35,37 +35,37 @@
 <div class="row mb-3">
   <div class="col-md-6">
     <div class="d-flex align-items-center mb-2">
-      <span class="badge mr-2 {{#tokenexists}}badge-success{{/tokenexists}}{{^tokenexists}}badge-danger{{/tokenexists}}" data-region="aiprovider_datacurso/token-badge">
-        {{#tokenexists}}{{#str}} exists, aiprovider_datacurso{{/str}}{{/tokenexists}}{{^tokenexists}}{{#str}} missing, aiprovider_datacurso{{/str}}{{/tokenexists}}
+      <span class="badge mr-2 {{#tokenexists}}badge-success{{/tokenexists}}{{^tokenexists}}badge-danger{{/tokenexists}}" data-region="aiprovider_birtai/token-badge">
+        {{#tokenexists}}{{#str}} exists, aiprovider_birtai{{/str}}{{/tokenexists}}{{^tokenexists}}{{#str}} missing, aiprovider_birtai{{/str}}{{/tokenexists}}
       </span>
-      <strong>{{#str}} ws_tokenexists, aiprovider_datacurso {{/str}}</strong>
+      <strong>{{#str}} ws_tokenexists, aiprovider_birtai {{/str}}</strong>
     </div>
     {{#tokenexists}}
       {{#tokencreated}}
-        <small class="text-muted" data-region="aiprovider_datacurso/token-created">{{#str}} created, aiprovider_datacurso{{/str}}: {{tokencreated}}</small>
+        <small class="text-muted" data-region="aiprovider_birtai/token-created">{{#str}} created, aiprovider_birtai{{/str}}: {{tokencreated}}</small>
       {{/tokencreated}}
     {{/tokenexists}}
   </div>
   <div class="col-md-6">
     <div class="d-flex align-items-center mb-2">
-      <span class="badge mr-2 {{#registration.verified}}badge-success{{/registration.verified}}{{^registration.verified}}badge-warning{{/registration.verified}}" data-region="aiprovider_datacurso/registration-badge">
-        {{#registration.verified}}{{#str}} verified, aiprovider_datacurso{{/str}}{{/registration.verified}}{{^registration.verified}}{{#str}} pending, aiprovider_datacurso{{/str}}{{/registration.verified}}
+      <span class="badge mr-2 {{#registration.verified}}badge-success{{/registration.verified}}{{^registration.verified}}badge-warning{{/registration.verified}}" data-region="aiprovider_birtai/registration-badge">
+        {{#registration.verified}}{{#str}} verified, aiprovider_birtai{{/str}}{{/registration.verified}}{{^registration.verified}}{{#str}} pending, aiprovider_birtai{{/str}}{{/registration.verified}}
       </span>
-      <strong>{{#str}} registration_status, aiprovider_datacurso {{/str}}</strong>
+      <strong>{{#str}} registration_status, aiprovider_birtai {{/str}}</strong>
     </div>
     {{#registration.lastsent}}
-      <small class="text-muted" data-region="aiprovider_datacurso/registration-lastsent">{{#str}} last_sent, aiprovider_datacurso{{/str}}: {{registration.lastsent}}{{#registration.laststatus}} — {{registration.laststatus}}{{/registration.laststatus}}</small>
+      <small class="text-muted" data-region="aiprovider_birtai/registration-lastsent">{{#str}} last_sent, aiprovider_birtai{{/str}}: {{registration.lastsent}}{{#registration.laststatus}} — {{registration.laststatus}}{{/registration.laststatus}}</small>
     {{/registration.lastsent}}
   </div>
 </div>
 
 {{#registration.verified}}
   <div class="alert alert-success mb-3">
-    <i class="fa fa-check-circle mr-2"></i>{{#str}} registration_verified, aiprovider_datacurso {{/str}}
+    <i class="fa fa-check-circle mr-2"></i>{{#str}} registration_verified, aiprovider_birtai {{/str}}
   </div>
 {{/registration.verified}}
 {{^registration.verified}}
   <div class="alert alert-warning mb-3">
-    <i class="fa fa-exclamation-triangle mr-2"></i>{{#str}} registration_notverified, aiprovider_datacurso {{/str}}
+    <i class="fa fa-exclamation-triangle mr-2"></i>{{#str}} registration_notverified, aiprovider_birtai {{/str}}
   </div>
 {{/registration.verified}}

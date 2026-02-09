@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template aiprovider_datacurso/consumption_page
+    @template aiprovider_birtai/consumption_page
 
     TODO describe template consumption
 
@@ -31,7 +31,7 @@
             <div class="row align-items-end">
                 <div class="col-lg-3 col-md-6 col-12 mb-3">
                     <label for="filter-service" class="form-label font-weight-bold">
-                        {{#str}}service, aiprovider_datacurso{{/str}}:
+                        {{#str}}service, aiprovider_birtai{{/str}}:
                     </label>
                     <select id="filter-service" class="form-control">
                         <option value="">{{#str}}all, core{{/str}}</option>
@@ -40,7 +40,7 @@
 
                 <div class="col-lg-3 col-md-6 col-12 mb-3">
                     <label for="filter-action" class="form-label font-weight-bold">
-                        {{#str}}action, aiprovider_datacurso{{/str}}:
+                        {{#str}}action, aiprovider_birtai{{/str}}:
                     </label>
                     <select id="filter-action" class="form-control">
                         <option value="">{{#str}}all, core{{/str}}</option>
@@ -67,8 +67,8 @@
     </div>
 </div>
 
-<div data-region="aiprovider_datacurso/consumption-table">
-    {{> aiprovider_datacurso/consumption_row}}
+<div data-region="aiprovider_birtai/consumption-table">
+    {{> aiprovider_birtai/consumption_row}}
 </div>
 
 <!-- Pagination Section -->
@@ -95,7 +95,7 @@
                 <!-- Filter: Number of rows -->
                 <div class="col-lg-auto col-md-3 col-6 mb-2 mb-lg-0 pl-lg-2">
                     <label for="filter-limit" class="form-label font-weight-bold small mb-1 d-block">
-                        {{#str}}showrows, aiprovider_datacurso{{/str}}:
+                        {{#str}}showrows, aiprovider_birtai{{/str}}:
                     </label>
                     <select id="filter-limit" class="form-control">
                         <option value="10" selected>10</option>
@@ -108,7 +108,7 @@
                 <!-- Filer: Go to page -->
                 <div class="col-lg-auto col-md-3 col-6 mb-2 mb-lg-0 pl-lg-2">
                     <label for="filter-page" class="form-label font-weight-bold small mb-1 d-block">
-                        {{#str}}gotopage, aiprovider_datacurso{{/str}}:
+                        {{#str}}gotopage, aiprovider_birtai{{/str}}:
                     </label>
                     <input type="number" id="filter-page" min="1" class="form-control">
                 </div>

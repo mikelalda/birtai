@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso;
+namespace aiprovider_birtai;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
@@ -24,22 +24,46 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * Processor for generating text completions.
- * @copyright  Developer <developer@datacurso.com>
- * @package    aiprovider_datacurso
+ * @copyright  Developer <developer@birtai.com>
+ * @package    aiprovider_birtai
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class process_generate_text extends abstract_processor {
+    /** Default local API URL. */
+    private const DEFAULT_LOCAL_URL = 'http://localhost:8001';
+
+    /** Default external API URL. */
+    private const DEFAULT_EXTERNAL_URL = 'https://plugins-ai.birtai.com';
+
+    /**
+     * Get the base API URL based on configuration.
+     *
+     * @return string The base URL to use.
+     */
+    protected function get_base_url(): string {
+        $localurl = get_config('aiprovider_birtai', 'local_api_url');
+        $uselocalapi = get_config('aiprovider_birtai', 'use_local_api');
+
+        if (!empty($uselocalapi) && !empty($localurl)) {
+            return rtrim($localurl, '/');
+        } else if (!empty($uselocalapi)) {
+            return self::DEFAULT_LOCAL_URL;
+        }
+
+        return self::DEFAULT_EXTERNAL_URL;
+    }
+
     /**
      * Returns the endpoint URI for this processor.
      */
     #[\Override]
     protected function get_endpoint(): UriInterface {
-        return new Uri('https://plugins-ai.datacurso.com/provider/chat/completions');
+        return new Uri($this->get_base_url() . '/provider/chat/completions');
     }
 
     #[\Override]
     protected function get_system_instruction(): string {
-        return get_config('aiprovider_datacurso', 'action_generate_text_systeminstruction');
+        return get_config('aiprovider_birtai', 'action_generate_text_systeminstruction');
     }
 
     /**
@@ -84,7 +108,7 @@ class process_generate_text extends abstract_processor {
     protected function create_request_object(string $userid): RequestInterface {
         $body = json_encode($this->build_request_body($userid));
 
-        $licensekey = get_config('aiprovider_datacurso', 'licensekey');
+        $licensekey = get_config('aiprovider_birtai', 'licensekey');
 
         return new Request(
             'POST',
@@ -107,7 +131,7 @@ class process_generate_text extends abstract_processor {
         if (empty($body) || empty($body->choices[0]->message->content)) {
             return [
                 'success' => false,
-                'error' => get_string('responseinvalidai', 'aiprovider_datacurso'),
+                'error' => get_string('responseinvalidai', 'aiprovider_birtai'),
             ];
         }
 

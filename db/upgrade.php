@@ -17,19 +17,19 @@
 /**
  * Plugin upgrade steps are defined here.
  *
- * @package     aiprovider_datacurso
+ * @package     aiprovider_birtai
  * @category    upgrade
- * @copyright   Josue <josue@datacurso.com>
+ * @copyright   Josue <josue@birtai.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Execute aiprovider_datacurso upgrade from the given old version.
+ * Execute aiprovider_birtai upgrade from the given old version.
  *
  * @param int $oldversion
  * @return bool
  */
-function xmldb_aiprovider_datacurso_upgrade($oldversion) {
+function xmldb_aiprovider_birtai_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
@@ -39,10 +39,10 @@ function xmldb_aiprovider_datacurso_upgrade($oldversion) {
     // You will also have to create the db/install.xml file by using the XMLDB Editor.
     // Documentation for the XMLDB Editor can be found at {@link https://docs.moodle.org/dev/XMLDB_editor}.
     if ($oldversion < 2025110500) {
-        // Define table aiprovider_datacurso_rlimit to be created.
-        $table = new xmldb_table('aiprovider_datacurso_rlimit');
+        // Define table aiprovider_birtai_rlimit to be created.
+        $table = new xmldb_table('aiprovider_birtai_rlimit');
 
-        // Adding fields to table aiprovider_datacurso_rlimit.
+        // Adding fields to table aiprovider_birtai_rlimit.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('serviceid', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
@@ -53,61 +53,61 @@ function xmldb_aiprovider_datacurso_upgrade($oldversion) {
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
-        // Adding keys to table aiprovider_datacurso_rlimit.
+        // Adding keys to table aiprovider_birtai_rlimit.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         $table->add_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id']);
         $table->add_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
 
-        // Conditionally launch create table for aiprovider_datacurso_rlimit.
+        // Conditionally launch create table for aiprovider_birtai_rlimit.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
-        // Datacurso savepoint reached.
-        upgrade_plugin_savepoint(true, 2025110500, 'aiprovider', 'datacurso');
+        // birtai savepoint reached.
+        upgrade_plugin_savepoint(true, 2025110500, 'aiprovider', 'birtai');
     }
 
     if ($oldversion < 2025110600) {
         try {
-            \aiprovider_datacurso\webservice_config::upgrade_sync_ws_and_capabilities();
+            \aiprovider_birtai\webservice_config::upgrade_sync_ws_and_capabilities();
         } catch (\Exception $e) {
             \core\notification::add(
-                get_string('upgrade_sync_error', 'aiprovider_datacurso', $e->getMessage()),
+                get_string('upgrade_sync_error', 'aiprovider_birtai', $e->getMessage()),
                 \core\output\notification::NOTIFY_ERROR
             );
         }
-        upgrade_plugin_savepoint(true, 2025110600, 'aiprovider', 'datacurso');
+        upgrade_plugin_savepoint(true, 2025110600, 'aiprovider', 'birtai');
     }
 
     if ($oldversion < 2025112705) {
         try {
-            \aiprovider_datacurso\webservice_config::upgrade_sync_ws_and_capabilities();
+            \aiprovider_birtai\webservice_config::upgrade_sync_ws_and_capabilities();
         } catch (\Exception $e) {
             \core\notification::add(
-                get_string('upgrade_sync_error', 'aiprovider_datacurso', $e->getMessage()),
+                get_string('upgrade_sync_error', 'aiprovider_birtai', $e->getMessage()),
                 \core\output\notification::NOTIFY_ERROR
             );
         }
-        upgrade_plugin_savepoint(true, 2025112705, 'aiprovider', 'datacurso');
+        upgrade_plugin_savepoint(true, 2025112705, 'aiprovider', 'birtai');
     }
 
     if ($oldversion < 2025120201) {
         try {
-            \aiprovider_datacurso\webservice_config::upgrade_sync_ws_and_capabilities();
+            \aiprovider_birtai\webservice_config::upgrade_sync_ws_and_capabilities();
         } catch (\Exception $e) {
             \core\notification::add(
-                get_string('upgrade_sync_error', 'aiprovider_datacurso', $e->getMessage()),
+                get_string('upgrade_sync_error', 'aiprovider_birtai', $e->getMessage()),
                 \core\output\notification::NOTIFY_ERROR
             );
         }
-        upgrade_plugin_savepoint(true, 2025120201, 'aiprovider', 'datacurso');
+        upgrade_plugin_savepoint(true, 2025120201, 'aiprovider', 'birtai');
     }
 
     if ($oldversion < 2025120301) {
-        // Define table aiprovider_datacurso_userlimit to be created.
-        $table = new xmldb_table('aiprovider_datacurso_userlimit');
+        // Define table aiprovider_birtai_userlimit to be created.
+        $table = new xmldb_table('aiprovider_birtai_userlimit');
 
-        // Adding fields to table aiprovider_datacurso_userlimit.
+        // Adding fields to table aiprovider_birtai_userlimit.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('tokenlimit', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
@@ -118,18 +118,18 @@ function xmldb_aiprovider_datacurso_upgrade($oldversion) {
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
-        // Adding keys to table aiprovider_datacurso_userlimit.
+        // Adding keys to table aiprovider_birtai_userlimit.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         $table->add_key('userid_fk', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
         $table->add_key('usermodified_fk', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id']);
 
-        // Conditionally launch create table for aiprovider_datacurso_userlimit.
+        // Conditionally launch create table for aiprovider_birtai_userlimit.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
-        // Datacurso savepoint reached.
-        upgrade_plugin_savepoint(true, 2025120301, 'aiprovider', 'datacurso');
+        // birtai savepoint reached.
+        upgrade_plugin_savepoint(true, 2025120301, 'aiprovider', 'birtai');
     }
     return true;
 }

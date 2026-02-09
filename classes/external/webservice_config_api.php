@@ -14,23 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\external;
+namespace aiprovider_birtai\external;
 
 use external_multiple_structure;
 use external_api;
 use external_function_parameters;
 use external_value;
 use external_single_structure;
-use aiprovider_datacurso\webservice_config;
+use aiprovider_birtai\webservice_config;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * AJAX external functions for configuring the Datacurso web service.
+ * AJAX external functions for configuring the birtai web service.
  *
- * @package    aiprovider_datacurso
+ * @package    aiprovider_birtai
  * @category   external
  * @copyright  2025
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -54,7 +54,7 @@ class webservice_config_api extends external_api {
         self::validate_parameters(self::setup_parameters(), []);
         $coursecontext = \context_system::instance();
         self::validate_context($coursecontext);
-        require_capability('aiprovider/datacurso:configurews', $coursecontext);
+        require_capability('aiprovider/birtai:configurews', $coursecontext);
         return webservice_config::setup();
     }
 
@@ -85,7 +85,7 @@ class webservice_config_api extends external_api {
         self::validate_parameters(self::regenerate_token_parameters(), []);
         $coursecontext = \context_system::instance();
         self::validate_context($coursecontext);
-        require_capability('aiprovider/datacurso:configurews', $coursecontext);
+        require_capability('aiprovider/birtai:configurews', $coursecontext);
         $result = webservice_config::regenerate_token();
         return $result;
     }
@@ -117,7 +117,7 @@ class webservice_config_api extends external_api {
         self::validate_parameters(self::get_status_parameters(), []);
         $coursecontext = \context_system::instance();
         self::validate_context($coursecontext);
-        require_capability('aiprovider/datacurso:configurews', $coursecontext);
+        require_capability('aiprovider/birtai:configurews', $coursecontext);
         return webservice_config::get_status();
     }
 

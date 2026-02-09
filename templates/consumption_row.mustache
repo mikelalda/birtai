@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template aiprovider_datacurso/consumption_row
+    @template aiprovider_birtai/consumption_row
 
     Template for rendering consumption history rows.
 
@@ -24,18 +24,18 @@
     }
 }}
 
-<table class="generaltable w-100" data-region="aiprovider_datacurso/consumption-table-table">
+<table class="generaltable w-100" data-region="aiprovider_birtai/consumption-table-table">
     <thead>
         <tr>
-            <th>{{#str}}id, aiprovider_datacurso{{/str}}</th>
-            <th>{{#str}}userid, aiprovider_datacurso{{/str}}</th>
-            <th>{{#str}}action, aiprovider_datacurso{{/str}}</th>
-            <th>{{#str}}service, aiprovider_datacurso{{/str}}</th>
+            <th>{{#str}}id, aiprovider_birtai{{/str}}</th>
+            <th>{{#str}}userid, aiprovider_birtai{{/str}}</th>
+            <th>{{#str}}action, aiprovider_birtai{{/str}}</th>
+            <th>{{#str}}service, aiprovider_birtai{{/str}}</th>
             <th class="sortable" data-sort="cantidad_tokens" style="cursor:pointer;">
-                {{#str}}tokensused, aiprovider_datacurso{{/str}}
+                {{#str}}tokensused, aiprovider_birtai{{/str}}
                 <i class="fa fa-sort sort-icon"></i>
             </th>
-            <th>{{#str}}remainingtokens, aiprovider_datacurso{{/str}}</th>
+            <th>{{#str}}remainingtokens, aiprovider_birtai{{/str}}</th>
             <th class="sortable" data-sort="fecha" style="cursor:pointer;">
                 {{#str}}date, core{{/str}}
                 <i class="fa fa-sort sort-icon"></i>
@@ -65,7 +65,7 @@
             {{^consumptions}}
                 <tr>
                     <td colspan="7" class="text-center text-danger">
-                        {{#str}}nodata, aiprovider_datacurso{{/str}}
+                        {{#str}}nodata, aiprovider_birtai{{/str}}
                     </td>
                 </tr>
             {{/consumptions}}

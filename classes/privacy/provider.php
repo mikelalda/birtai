@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace aiprovider_datacurso\privacy;
+namespace aiprovider_birtai\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
@@ -28,47 +28,47 @@ use core_privacy\local\request\writer;
 use stdClass;
 
 /**
- * Privacy Subsystem for aiprovider_datacurso implementing metadata provider.
+ * Privacy Subsystem for aiprovider_birtai implementing metadata provider.
  *
- * @package    aiprovider_datacurso
- * @copyright  2025 Wilber Narvaez <https://datacurso.com>
+ * @package    aiprovider_birtai
+ * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements core_userlist_provider, metadata_provider, plugin_provider {
     #[\Override]
     public static function get_metadata(collection $collection): collection {
-        $collection->add_external_location_link('aiprovider_datacurso', [
-            'prompt' => 'privacy:metadata:aiprovider_datacurso:prompt',
-            'numberimages' => 'privacy:metadata:aiprovider_datacurso:numberimages',
-            'userid' => 'privacy:metadata:aiprovider_datacurso:userid',
-        ], 'privacy:metadata:aiprovider_datacurso:externalpurpose');
+        $collection->add_external_location_link('aiprovider_birtai', [
+            'prompt' => 'privacy:metadata:aiprovider_birtai:prompt',
+            'numberimages' => 'privacy:metadata:aiprovider_birtai:numberimages',
+            'userid' => 'privacy:metadata:aiprovider_birtai:userid',
+        ], 'privacy:metadata:aiprovider_birtai:externalpurpose');
 
         $fields = [
             'userid', 'serviceid', 'windowstart', 'tokensused', 'lastsync', 'timecreated', 'timemodified',
         ];
         $fielddata = [];
         foreach ($fields as $field) {
-            $fielddata[$field] = get_string('privacy:metadata:aiprovider_datacurso_rlimit:' . $field, 'aiprovider_datacurso');
+            $fielddata[$field] = get_string('privacy:metadata:aiprovider_birtai_rlimit:' . $field, 'aiprovider_birtai');
         }
         $collection->add_database_table(
-            'aiprovider_datacurso_rlimit',
+            'aiprovider_birtai_rlimit',
             $fielddata,
-            get_string('privacy:metadata:aiprovider_datacurso_rlimit', 'aiprovider_datacurso')
+            get_string('privacy:metadata:aiprovider_birtai_rlimit', 'aiprovider_birtai')
         );
 
         $userlimitfields = [
-            'userid' => get_string('privacy:metadata:aiprovider_datacurso_userlimit:userid', 'aiprovider_datacurso'),
-            'tokenlimit' => get_string('privacy:metadata:aiprovider_datacurso_userlimit:tokenlimit', 'aiprovider_datacurso'),
-            'tokensused' => get_string('privacy:metadata:aiprovider_datacurso_userlimit:tokensused', 'aiprovider_datacurso'),
-            'countfrom' => get_string('privacy:metadata:aiprovider_datacurso_userlimit:countfrom', 'aiprovider_datacurso'),
-            'lastsync' => get_string('privacy:metadata:aiprovider_datacurso_userlimit:lastsync', 'aiprovider_datacurso'),
-            'timecreated' => get_string('privacy:metadata:aiprovider_datacurso_userlimit:timecreated', 'aiprovider_datacurso'),
-            'timemodified' => get_string('privacy:metadata:aiprovider_datacurso_userlimit:timemodified', 'aiprovider_datacurso'),
+            'userid' => get_string('privacy:metadata:aiprovider_birtai_userlimit:userid', 'aiprovider_birtai'),
+            'tokenlimit' => get_string('privacy:metadata:aiprovider_birtai_userlimit:tokenlimit', 'aiprovider_birtai'),
+            'tokensused' => get_string('privacy:metadata:aiprovider_birtai_userlimit:tokensused', 'aiprovider_birtai'),
+            'countfrom' => get_string('privacy:metadata:aiprovider_birtai_userlimit:countfrom', 'aiprovider_birtai'),
+            'lastsync' => get_string('privacy:metadata:aiprovider_birtai_userlimit:lastsync', 'aiprovider_birtai'),
+            'timecreated' => get_string('privacy:metadata:aiprovider_birtai_userlimit:timecreated', 'aiprovider_birtai'),
+            'timemodified' => get_string('privacy:metadata:aiprovider_birtai_userlimit:timemodified', 'aiprovider_birtai'),
         ];
         $collection->add_database_table(
-            'aiprovider_datacurso_userlimit',
+            'aiprovider_birtai_userlimit',
             $userlimitfields,
-            get_string('privacy:metadata:aiprovider_datacurso_userlimit', 'aiprovider_datacurso')
+            get_string('privacy:metadata:aiprovider_birtai_userlimit', 'aiprovider_birtai')
         );
         return $collection;
     }
@@ -107,8 +107,8 @@ class provider implements core_userlist_provider, metadata_provider, plugin_prov
             $records = $DB->get_recordset($table, $filterparams);
             foreach ($records as $record) {
                 writer::with_context($context)->export_data([
-                    get_string('privacy:metadata:aiprovider_datacurso', 'aiprovider_datacurso'),
-                    get_string('privacy:metadata:' . $table, 'aiprovider_datacurso'),
+                    get_string('privacy:metadata:aiprovider_birtai', 'aiprovider_birtai'),
+                    get_string('privacy:metadata:' . $table, 'aiprovider_birtai'),
                 ], $record);
             }
             $records->close();
@@ -192,8 +192,8 @@ class provider implements core_userlist_provider, metadata_provider, plugin_prov
      */
     protected static function get_table_user_map(stdClass $user): array {
         return [
-            'aiprovider_datacurso_rlimit' => ['userid' => $user->id],
-            'aiprovider_datacurso_userlimit' => ['userid' => $user->id],
+            'aiprovider_birtai_rlimit' => ['userid' => $user->id],
+            'aiprovider_birtai_userlimit' => ['userid' => $user->id],
         ];
     }
 }
