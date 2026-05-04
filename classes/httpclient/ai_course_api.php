@@ -67,6 +67,19 @@ class ai_course_api extends birtai_api_base {
      * @return string streaming URL
      */
     public function get_streaming_url_for_session(string $sessionid): string {
+        return $this->get_proxy_stream_url([
+            'type' => 'course',
+            'session_id' => $sessionid,
+        ]);
+    }
+
+    /**
+     * Build the backend streaming URL for a given course session ID.
+     *
+     * @param string $sessionid
+     * @return string backend streaming URL
+     */
+    public function get_backend_streaming_url_for_session(string $sessionid): string {
         $baseurl = rtrim($this->baseurl, '/');
         return $baseurl . '/course/stream?session_id=' . urlencode($sessionid);
     }
@@ -78,7 +91,54 @@ class ai_course_api extends birtai_api_base {
      * @return string streaming URL
      */
     public function get_mod_streaming_url_for_job(string $jobid): string {
+        return $this->get_proxy_stream_url([
+            'type' => 'resource',
+            'job_id' => $jobid,
+        ]);
+    }
+
+    /**
+     * Build the backend streaming URL for a module creation job.
+     *
+     * @param string $jobid
+     * @return string backend streaming URL
+     */
+    public function get_backend_mod_streaming_url_for_job(string $jobid): string {
         $baseurl = rtrim($this->baseurl, '/');
         return $baseurl . '/resources/create-mod/stream?job_id=' . urlencode($jobid);
+    }
+
+    /**
+     * Build the streaming URL for a designer chat session.
+     *
+     * @param string $sessionid
+     * @return string streaming URL
+     */
+    public function get_designer_streaming_url(string $sessionid): string {
+        return $this->get_proxy_stream_url([
+            'type' => 'designer',
+            'session_id' => $sessionid,
+        ]);
+    }
+
+    /**
+     * Build the backend streaming URL for a designer chat session.
+     *
+     * @param string $sessionid
+     * @return string backend streaming URL
+     */
+    public function get_backend_designer_streaming_url(string $sessionid): string {
+        $baseurl = rtrim($this->baseurl, '/');
+        return $baseurl . '/designer/chat/stream?session_id=' . urlencode($sessionid);
+    }
+
+    /**
+     * Build the Moodle same-origin proxy URL for browser EventSource requests.
+     *
+     * @param array $params Query parameters for the proxy script.
+     * @return string proxy URL
+     */
+    private function get_proxy_stream_url(array $params): string {
+        return (new \moodle_url('/local/coursegen/stream.php', $params))->out(false);
     }
 }

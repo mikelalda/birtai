@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'aiprovider_birtai';
-$plugin->release = '1.0.8';
-$plugin->version = 2026012900;
+$plugin->release = '1.0.10';
+$plugin->version = 2026042301;
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->supported = [405, 405];
