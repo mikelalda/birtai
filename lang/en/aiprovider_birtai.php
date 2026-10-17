@@ -108,6 +108,7 @@ $string['gotopage'] = 'Go to page';
 $string['hour'] = 'hour';
 $string['hours'] = 'Hours';
 $string['httperror'] = 'Unexpected error while processing your request (HTTP {$a}). Please try again later. If the problem persists, contact your site administrator.';
+$string['httperrordetail'] = 'The AI service could not process the request (HTTP {$a->code}): {$a->detail}';
 $string['id'] = 'ID';
 $string['installed'] = 'Installed';
 $string['invalidlicensekey'] = 'License key has expired or is invalid. Please go to <a href="https://shop.birtai.com/index.php?m=tokens_manager" target="_blank">Manage Credits</a> in the birtai Shop to renew or purchase a new license.';

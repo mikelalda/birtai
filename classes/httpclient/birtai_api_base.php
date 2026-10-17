@@ -248,6 +248,13 @@ class birtai_api_base {
 
         if ($httpcode >= 400) {
             debugging("HTTP error {$httpcode} from birtai API: {$response}", DEBUG_DEVELOPER);
+            // 4xx carry a message meant for the user ("file type not supported",
+            // "scanned PDF..."): show it instead of a bare "HTTP 400".
+            $detail = $httpcode < 500 ? self::error_detail($response) : '';
+            if ($detail !== '') {
+                throw new \moodle_exception('httperrordetail', 'aiprovider_birtai', '',
+                    (object)['code' => $httpcode, 'detail' => $detail]);
+            }
             throw new \moodle_exception('httperror', 'aiprovider_birtai', '', $httpcode);
         }
 
@@ -264,6 +271,25 @@ class birtai_api_base {
         $ratelimiter->sync_user_quota_after_success($userid, $path);
 
         return $decodedresponse;
+    }
+
+    /**
+     * Human-readable message of an API error body ({"detail": "..."} from FastAPI).
+     *
+     * @param string $response Raw response body
+     * @return string The message, or '' when there is none
+     */
+    protected static function error_detail(string $response): string {
+        $decoded = json_decode($response, true);
+        $detail = is_array($decoded) ? ($decoded['detail'] ?? '') : '';
+        if (is_array($detail)) {
+            // Validation errors: [{"loc": [...], "msg": "..."}, ...].
+            $detail = implode('; ', array_filter(array_map(
+                static fn($item) => is_array($item) ? (string)($item['msg'] ?? '') : (string)$item,
+                $detail
+            )));
+        }
+        return shorten_text(clean_param((string)$detail, PARAM_TEXT), 300);
     }
 
     /**

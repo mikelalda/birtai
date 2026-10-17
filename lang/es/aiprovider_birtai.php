@@ -108,6 +108,7 @@ $string['gotopage'] = 'Ir a la página';
 $string['hour'] = 'hora';
 $string['hours'] = 'Horas';
 $string['httperror'] = 'Error inesperado al procesar su solicitud (HTTP {$a}). Por favor, inténtelo de nuevo más tarde. Si el problema persiste, contacte a su administrador del sitio.';
+$string['httperrordetail'] = 'El servicio de IA no ha podido procesar la petición (HTTP {$a->code}): {$a->detail}';
 $string['id'] = 'ID';
 $string['installed'] = 'Instalado';
 $string['invalidlicensekey'] = 'La clave de licencia ha caducado o no es válida. Por favor, vaya a <a href="https://shop.birtai.com/index.php?m=tokens_manager" target="_blank">Gestionar Créditos</a> en la Tienda birtai para renovar o comprar una nueva licencia.';
