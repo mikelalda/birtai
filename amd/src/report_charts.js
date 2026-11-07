@@ -23,10 +23,10 @@
 
 import Ajax from 'core/ajax';
 import Chart from 'core/chartjs';
-import { get_string as getString } from 'core/str';
+import {get_string as getString} from 'core/str';
 import Notification from 'core/notification';
 
-export const init = async () => {
+export const init = async() => {
 
     const date = await getString('date', 'core');
     const creditsConsumedMonth = await getString('tokensconsumedmonth', 'aiprovider_birtai');
@@ -40,9 +40,9 @@ export const init = async () => {
     let cachedData = [];
 
     Promise.all([
-        Ajax.call([{ methodname: 'aiprovider_birtai_get_credits_balance', args: {} }])[0],
-        Ajax.call([{ methodname: 'aiprovider_birtai_get_services', args: {} }])[0],
-        Ajax.call([{ methodname: 'aiprovider_birtai_get_all_consumption', args: {} }])[0],
+        Ajax.call([{methodname: 'aiprovider_birtai_get_credits_balance', args: {}}])[0],
+        Ajax.call([{methodname: 'aiprovider_birtai_get_services', args: {}}])[0],
+        Ajax.call([{methodname: 'aiprovider_birtai_get_all_consumption', args: {}}])[0],
     ])
         .then(([balanceResponse, servicesResponse, consumptionResponse]) => {
             const balance = balanceResponse?.balance || 0;
@@ -50,10 +50,11 @@ export const init = async () => {
             const services = servicesResponse?.services || [];
             cachedData = consumptionResponse?.consumption || [];
             initCharts(services);
+            return;
         })
         .catch(Notification.exception);
 
-    // init grafic
+    // Charts.
     const initCharts = (services) => {
         const filterBar = document.getElementById('filter-service-bar');
         const filterPie = document.getElementById('filter-service-pie');
@@ -86,15 +87,15 @@ export const init = async () => {
         filterEnd.addEventListener('change', () => updateDayChart());
     };
 
-    // functions ws
-    const fetchConsumptionData = async (params = {}) => {
+    // Web service calls.
+    const fetchConsumptionData = async(params = {}) => {
         const defaults = {
             service: "",
             action: "",
             fromdate: "",
             todate: ""
         };
-        const finalParams = { ...defaults, ...params };
+        const finalParams = {...defaults, ...params};
 
         try {
             const response = await Ajax.call([{
@@ -113,7 +114,7 @@ export const init = async () => {
         }
     };
 
-    // grafic bar
+    // Bar chart.
     const renderBarChart = (data) => {
         const byMonth = {};
         data.forEach(c => {
@@ -139,20 +140,16 @@ export const init = async () => {
                     backgroundColor: '#0073e6',
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: {responsive: true, maintainAspectRatio: false}
         });
     };
 
-    const updateBarChart = async () => {
+    const updateBarChart = async() => {
         const service = document.getElementById('filter-service-bar').value;
-        if (!service) {
-            return renderBarChart(cachedData);
-        }
-        const data = await fetchConsumptionData({ service });
-        renderBarChart(data);
+        renderBarChart(service ? await fetchConsumptionData({service}) : cachedData);
     };
 
-    // grafic pie
+    // Pie chart.
     const renderPieChart = (data) => {
         const byAction = {};
         data.forEach(c => {
@@ -190,21 +187,16 @@ export const init = async () => {
                     ],
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: {responsive: true, maintainAspectRatio: false}
         });
     };
 
-    const updatePieChart = async () => {
+    const updatePieChart = async() => {
         const service = document.getElementById('filter-service-pie').value;
-        if (!service) {
-            return renderPieChart(cachedData);
-        }
-
-        const data = await fetchConsumptionData({ service });
-        renderPieChart(data);
+        renderPieChart(service ? await fetchConsumptionData({service}) : cachedData);
     };
 
-    // grafic day
+    // Daily chart.
     const renderDayChart = (data) => {
         const byDay = {};
         data.forEach(c => {
@@ -240,22 +232,17 @@ export const init = async () => {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { title: { display: true, text: date } },
-                    y: { title: { display: true, text: creditsConsumed }, beginAtZero: true }
+                    x: {title: {display: true, text: date}},
+                    y: {title: {display: true, text: creditsConsumed}, beginAtZero: true}
                 }
             }
         });
     };
 
-    const updateDayChart = async () => {
+    const updateDayChart = async() => {
         const fromdate = document.getElementById('filter-start-date').value;
         const todate = document.getElementById('filter-end-date').value;
 
-        if (!fromdate && !todate) {
-            return renderDayChart(cachedData);
-        }
-
-        const data = await fetchConsumptionData({ fromdate, todate });
-        renderDayChart(data);
+        renderDayChart(fromdate || todate ? await fetchConsumptionData({fromdate, todate}) : cachedData);
     };
 };

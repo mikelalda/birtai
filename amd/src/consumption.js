@@ -22,12 +22,12 @@
  */
 
 import Ajax from "core/ajax";
-import { get_string as getString } from "core/str";
+import {get_string as getString} from "core/str";
 import Templates from "core/templates";
 import Notification from "core/notification";
-import { getConsumptionHistory } from "aiprovider_birtai/repository";
+import {getConsumptionHistory} from "aiprovider_birtai/repository";
 
-export const init = async () => {
+export const init = async() => {
   // Elements DOM
   const filterService = document.getElementById("filter-service");
   const filterAction = document.getElementById("filter-action");
@@ -104,7 +104,7 @@ export const init = async () => {
     updateSortIndicators();
   };
 
-  const loadServices = async () => {
+  const loadServices = async() => {
     try {
       const response = await Ajax.call([
         {
@@ -123,11 +123,10 @@ export const init = async () => {
       }
     } catch (error) {
       Notification.exception(error);
-      return [];
     }
   };
 
-  const loadActions = async () => {
+  const loadActions = async() => {
     try {
       const response = await Ajax.call([
         {
@@ -146,11 +145,10 @@ export const init = async () => {
       }
     } catch (error) {
       Notification.exception(error);
-      return [];
     }
   };
 
-  const renderTable = async (listconsumptions, { loading = false } = {}) => {
+  const renderTable = async(listconsumptions, {loading = false} = {}) => {
     const container = document.querySelector(tableRegionSelector);
     if (!container) {
       return;
@@ -190,7 +188,7 @@ export const init = async () => {
   };
 
   // Get history with filters
-  const fetchData = async () => {
+  const fetchData = async() => {
     const serviceValue = filterService.value;
     const actionValue = filterAction.value;
     const fromValue = filterFrom.value;
@@ -210,7 +208,7 @@ export const init = async () => {
       args.shordir = currentSortDir;
     }
 
-    await renderTable([], { loading: true });
+    await renderTable([], {loading: true});
 
     const response = await getConsumptionHistory(args);
 
@@ -219,18 +217,19 @@ export const init = async () => {
 
     const pagination = response?.pagination;
     if (pagination) {
-      const { current_page, total_pages, total } = pagination;
+      // The page the server returned, which is not always the one asked for.
+      const {current_page: shownPage, total_pages: totalPages, total} = pagination;
       const pageInfoText = await getString("pageinfo", "aiprovider_birtai", {
-        current: current_page,
-        totalpages: total_pages,
+        current: shownPage,
+        totalpages: totalPages,
         total: total,
       });
       pageInfo.textContent = pageInfoText;
       if (pageInput) {
-        pageInput.value = current_page;
+        pageInput.value = shownPage;
       }
-      prevPageBtn.disabled = current_page <= 1;
-      nextPageBtn.disabled = current_page >= total_pages;
+      prevPageBtn.disabled = shownPage <= 1;
+      nextPageBtn.disabled = shownPage >= totalPages;
     } else {
       pageInfo.textContent = "";
       prevPageBtn.disabled = true;

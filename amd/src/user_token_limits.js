@@ -33,7 +33,7 @@ import {deleteUserTokenLimit, resetUserTokenUsage} from "aiprovider_birtai/repos
  * @param {string} message
  * @param {Function} onYes
  */
-const confirmAction = async (title, message, onYes) => {
+const confirmAction = async(title, message, onYes) => {
     const [yes, no] = await getStrings([
         {key: "yes"},
         {key: "no"}
@@ -45,7 +45,7 @@ const confirmAction = async (title, message, onYes) => {
  * Handle delete link click.
  * @param {HTMLElement} link
  */
-const handleDelete = async (link) => {
+const handleDelete = async(link) => {
     const id = link.dataset.id;
     const username = link.dataset.username || "";
     const [title, message] = await getStrings([
@@ -53,7 +53,7 @@ const handleDelete = async (link) => {
         {key: "confirm_delete_message", component: "aiprovider_birtai", param: username}
     ]);
 
-    await confirmAction(title, message, async () => {
+    await confirmAction(title, message, async() => {
         try {
             const result = await deleteUserTokenLimit(id);
             if (result && result.success) {
@@ -73,7 +73,7 @@ const handleDelete = async (link) => {
  * Handle reset usage link click.
  * @param {HTMLElement} link
  */
-const handleReset = async (link) => {
+const handleReset = async(link) => {
     const id = link.dataset.id;
     const username = link.dataset.username || "";
     const [title, message] = await getStrings([
@@ -81,7 +81,7 @@ const handleReset = async (link) => {
         {key: "confirm_reset_usage_message", component: "aiprovider_birtai", param: username}
     ]);
 
-    await confirmAction(title, message, async () => {
+    await confirmAction(title, message, async() => {
         try {
             const result = await resetUserTokenUsage(id);
             if (result && result.success) {
@@ -103,7 +103,7 @@ export const init = () => {
         return;
     }
 
-    root.addEventListener("click", async (e) => {
+    root.addEventListener("click", async(e) => {
         const deleteLink = e.target.closest('[data-action="delete"]');
         if (deleteLink) {
             e.preventDefault();

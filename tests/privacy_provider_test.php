@@ -26,6 +26,7 @@ use core_privacy\tests\provider_testcase;
 use aiprovider_birtai\privacy\provider;
 use stdClass;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\aiprovider_birtai\privacy\provider::class)]
 /**
  * Privacy provider tests for birtai AI provider.
  *
@@ -33,6 +34,7 @@ use stdClass;
  * @category   test
  * @copyright  2025 Wilber Narvaez <https://birtai.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \aiprovider_birtai\privacy\provider
  */
 final class privacy_provider_test extends provider_testcase {
     /**
@@ -46,8 +48,6 @@ final class privacy_provider_test extends provider_testcase {
 
     /**
      * get_contexts_for_userid returns user context only when data exists.
-     *
-     * @covers \aiprovider_birtai\privacy\provider::get_contexts_for_userid
      */
     public function test_get_contexts_for_userid(): void {
         $user = $this->getDataGenerator()->create_user();
@@ -65,8 +65,6 @@ final class privacy_provider_test extends provider_testcase {
 
     /**
      * Only users with user context are fetched.
-     *
-     * @covers \aiprovider_birtai\privacy\provider::get_users_in_context
      */
     public function test_get_users_in_context(): void {
         $component = 'aiprovider_birtai';
@@ -92,8 +90,6 @@ final class privacy_provider_test extends provider_testcase {
 
     /**
      * User data is exported correctly.
-     *
-     * @covers \aiprovider_birtai\privacy\provider::export_user_data
      */
     public function test_export_user_data(): void {
         $user = $this->getDataGenerator()->create_user();
@@ -124,8 +120,6 @@ final class privacy_provider_test extends provider_testcase {
 
     /**
      * Delete all users in a user context removes records for that user.
-     *
-     * @covers \aiprovider_birtai\privacy\provider::delete_data_for_all_users_in_context
      */
     public function test_delete_data_for_all_users_in_context(): void {
         global $DB;
@@ -148,8 +142,6 @@ final class privacy_provider_test extends provider_testcase {
 
     /**
      * Delete data for user via approved context list.
-     *
-     * @covers \aiprovider_birtai\privacy\provider::delete_data_for_user
      */
     public function test_delete_data_for_user(): void {
         global $DB;
@@ -173,8 +165,6 @@ final class privacy_provider_test extends provider_testcase {
 
     /**
      * Delete data for users in an approved userlist in a given context.
-     *
-     * @covers \aiprovider_birtai\privacy\provider::delete_data_for_users
      */
     public function test_delete_data_for_users(): void {
         $component = 'aiprovider_birtai';

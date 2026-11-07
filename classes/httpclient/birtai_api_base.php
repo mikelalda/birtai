@@ -252,8 +252,12 @@ class birtai_api_base {
             // "scanned PDF..."): show it instead of a bare "HTTP 400".
             $detail = $httpcode < 500 ? self::error_detail($response) : '';
             if ($detail !== '') {
-                throw new \moodle_exception('httperrordetail', 'aiprovider_birtai', '',
-                    (object)['code' => $httpcode, 'detail' => $detail]);
+                throw new \moodle_exception(
+                    'httperrordetail',
+                    'aiprovider_birtai',
+                    '',
+                    (object)['code' => $httpcode, 'detail' => $detail]
+                );
             }
             throw new \moodle_exception('httperror', 'aiprovider_birtai', '', $httpcode);
         }
@@ -283,7 +287,7 @@ class birtai_api_base {
         $decoded = json_decode($response, true);
         $detail = is_array($decoded) ? ($decoded['detail'] ?? '') : '';
         if (is_array($detail)) {
-            // Validation errors: [{"loc": [...], "msg": "..."}, ...].
+            // Validation errors: a list of objects, each with its own "msg".
             $detail = implode('; ', array_filter(array_map(
                 static fn($item) => is_array($item) ? (string)($item['msg'] ?? '') : (string)$item,
                 $detail
