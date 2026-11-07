@@ -58,6 +58,19 @@ final class provider_test extends \advanced_testcase {
         );
     }
 
+    /**
+     * A settings page with the plugin settings (adminlib.php is not autoloaded on Moodle 4.5).
+     *
+     * @return \admin_settingpage
+     */
+    private function settings_page(): \admin_settingpage {
+        global $CFG;
+        require_once($CFG->libdir . '/adminlib.php');
+        $page = new \admin_settingpage('aiprovider_birtai', 'birtai');
+        admin_settings::add_settings($page);
+        return $page;
+    }
+
     public function test_the_provider_loads_and_offers_its_actions(): void {
         $this->resetAfterTest();
 
@@ -139,9 +152,7 @@ final class provider_test extends \advanced_testcase {
 
     public function test_the_settings_page_holds_the_connection_and_rate_limits(): void {
         $this->resetAfterTest();
-        $page = new \admin_settingpage('aiprovider_birtai', 'birtai');
-
-        admin_settings::add_settings($page);
+        $page = $this->settings_page();
 
         $names = array_map(fn($setting) => $setting->name, (array) $page->settings);
         $this->assertContains('licensekey', $names);
@@ -156,8 +167,7 @@ final class provider_test extends \advanced_testcase {
 
     public function test_writing_the_settings_page(): void {
         $this->resetAfterTest();
-        $page = new \admin_settingpage('aiprovider_birtai', 'birtai');
-        admin_settings::add_settings($page);
+        $page = $this->settings_page();
 
         $count = admin_settings::write_settings($page, (object) [
             's_aiprovider_birtai_local_api_url' => 'http://moodle-ai-provider:8001',
