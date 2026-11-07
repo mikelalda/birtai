@@ -87,6 +87,34 @@ abstract class abstract_processor extends process_base {
      */
     #[\Override]
     protected function query_ai_api(): array {
+        return self::with_error_fields($this->request_ai_api());
+    }
+
+    /**
+     * Give a failed result the three error fields that Moodle passes, typed, to the response
+     * class: without them a failure became a TypeError instead of an error message.
+     *
+     * @param array $result
+     * @return array
+     */
+    protected static function with_error_fields(array $result): array {
+        if (!empty($result['success'])) {
+            return $result;
+        }
+        $message = (string) ($result['errormessage'] ?? $result['error'] ?? '');
+        return array_merge($result, [
+            'errorcode' => (int) ($result['errorcode'] ?? 500),
+            'error' => (string) ($result['error'] ?? $message),
+            'errormessage' => $message,
+        ]);
+    }
+
+    /**
+     * Send the request to the BirtAI service and read its answer.
+     *
+     * @return array Processed response data, either success or error.
+     */
+    private function request_ai_api(): array {
         global $USER;
 
         $licensekey = get_config('aiprovider_birtai', 'licensekey');

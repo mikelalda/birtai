@@ -100,6 +100,21 @@ final class provider_test extends \advanced_testcase {
         $this->assertSame(summarise_text::get_system_instruction(), $method->invoke($processor));
     }
 
+    public function test_a_failure_carries_every_error_field(): void {
+        $method = new \ReflectionMethod(abstract_processor::class, 'with_error_fields');
+
+        $this->assertSame(
+            ['success' => false, 'error' => 'Invalid answer', 'errorcode' => 500, 'errormessage' => 'Invalid answer'],
+            $method->invoke(null, ['success' => false, 'error' => 'Invalid answer'])
+        );
+        $this->assertSame(
+            ['success' => false, 'errorcode' => 504, 'errormessage' => 'Timed out', 'error' => 'Timed out'],
+            $method->invoke(null, ['success' => false, 'errorcode' => 504, 'errormessage' => 'Timed out'])
+        );
+        $success = ['success' => true, 'generatedcontent' => 'Hi'];
+        $this->assertSame($success, $method->invoke(null, $success));
+    }
+
     public function test_the_settings_page_holds_the_connection_and_rate_limits(): void {
         global $CFG;
         require_once($CFG->libdir . '/adminlib.php');

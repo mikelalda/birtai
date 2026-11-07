@@ -11,6 +11,9 @@
 - **Web service setup with the local API**: it no longer waits for a site registration that the
   local API does not do. That left the web service "not configured" and blocked the AI review
   actions of assign_ai.
+- **Failed AI requests**: a failure lacked some of the error fields that Moodle passes, typed, to
+  the response class, so an invalid answer or a blocked URL ended in a TypeError instead of an
+  error message.
 
 ## Added
 - PHPUnit tests of the provider and of the web service setup.
