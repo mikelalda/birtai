@@ -27,10 +27,8 @@
  * Custom code to be run on installing the plugin.
  */
 function xmldb_aiprovider_birtai_install() {
-    // Moodle 5.0 and later do not load the settings.php of AI provider plugins, so they
-    // never write its defaults: write them here.
-    if (\aiprovider_birtai\local\compat::has_provider_instances()) {
-        \aiprovider_birtai\local\admin_settings::apply_defaults();
-    }
+    // Moodle does not load the settings.php of AI provider plugins, so it never writes
+    // the defaults of their settings: write them here.
+    \aiprovider_birtai\local\admin_settings::apply_defaults();
     return true;
 }

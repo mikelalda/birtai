@@ -31,8 +31,8 @@ class hook_listener {
     /**
      * Link the settings and pages of the plugin from the form of a birtai provider instance.
      *
-     * The hook exists from Moodle 5.0, where the plugin settings are no longer in the
-     * administration tree: the instance form is where an administrator looks for them.
+     * The plugin settings are not in the administration tree: the instance form is where
+     * an administrator looks for them.
      *
      * @param \core_ai\hook\after_ai_provider_form_hook $hook
      */

@@ -24,11 +24,11 @@ use lang_string;
 use moodle_url;
 
 /**
- * The plugin settings and administration pages of birtai, on every Moodle version.
+ * The plugin settings and administration pages of birtai.
  *
- * Moodle 4.5 shows them in the administration tree through settings.php. Moodle 5.0
- * no longer loads the settings.php of AI provider plugins, so there the settings have
- * a page of their own (admin/settings.php) and the other pages set themselves up.
+ * Moodle 5 does not load the settings.php of AI provider plugins, so the settings have a
+ * page of their own (admin/settings.php) and the other pages set themselves up. The form
+ * of a birtai provider instance links to all of them.
  *
  * @package    aiprovider_birtai
  * @copyright  2025 Industria Elearning
@@ -140,9 +140,8 @@ final class admin_settings {
     /**
      * Save the default of every plugin setting that has no value yet.
      *
-     * Moodle 4.5 does it itself through the administration tree when it installs or
-     * upgrades the plugin. From Moodle 5.0 the settings are not in that tree, so the
-     * plugin has to.
+     * Moodle writes the defaults of the settings in its administration tree; these are
+     * not in it, so the plugin does it on install and upgrade.
      *
      * @return int Number of settings written.
      */
@@ -164,29 +163,26 @@ final class admin_settings {
     }
 
     /**
-     * The administration pages of the plugin, with where Moodle 4.5 lists them.
+     * The administration pages of the plugin.
      *
-     * @return array[] Each one {name, parent, title, url, capability}.
+     * @return array[] Each one {name, title, url, capability}.
      */
     public static function get_pages(): array {
         return [
             [
                 'name' => 'aiprovider_birtai_reports',
-                'parent' => 'reports',
                 'title' => get_string('link_generalreport_birtai', 'aiprovider_birtai'),
                 'url' => new moodle_url('/ai/provider/birtai/admin/report_sections.php'),
                 'capability' => 'moodle/site:config',
             ],
             [
                 'name' => 'aiprovider_birtai_webservice',
-                'parent' => 'server',
                 'title' => get_string('link_webservice_config', 'aiprovider_birtai'),
                 'url' => new moodle_url('/ai/provider/birtai/admin/webservice_config.php'),
                 'capability' => 'moodle/site:config',
             ],
             [
                 'name' => 'aiprovider_birtai_userlimits',
-                'parent' => 'users',
                 'title' => get_string('link_usertokenlimits', 'aiprovider_birtai'),
                 'url' => new moodle_url('/ai/provider/birtai/admin/user_token_limits.php'),
                 'capability' => 'aiprovider/birtai:managetokenlimits',
@@ -195,10 +191,7 @@ final class admin_settings {
     }
 
     /**
-     * Set up one of the plugin's administration pages.
-     *
-     * Moodle 4.5 has the page in the administration tree; from Moodle 5.0 the page sets up
-     * the context, layout and capability check itself.
+     * Set up one of the plugin's administration pages, which are not in the administration tree.
      *
      * @param string $section Name of the page in get_pages().
      * @param moodle_url $url
@@ -206,10 +199,6 @@ final class admin_settings {
     public static function setup_page(string $section, moodle_url $url): void {
         global $PAGE;
 
-        if (!compat::has_provider_instances()) {
-            admin_externalpage_setup($section, '', null, $url);
-            return;
-        }
         $page = array_column(self::get_pages(), null, 'name')[$section];
         $context = \context_system::instance();
         require_login();
@@ -222,7 +211,7 @@ final class admin_settings {
     }
 
     /**
-     * Save the submitted values of a settings page that is not in the administration tree.
+     * Save the submitted values of the settings page, which is not in the administration tree.
      *
      * @param \admin_settingpage $settings
      * @param \stdClass $data The submitted form.

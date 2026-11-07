@@ -17,8 +17,6 @@
 /**
  * Hook callbacks of aiprovider_birtai.
  *
- * The hook only exists from Moodle 5.0; on Moodle 4.5 it is never dispatched.
- *
  * @package    aiprovider_birtai
  * @copyright  2026 Mikel Aldalur
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

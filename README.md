@@ -84,7 +84,7 @@ Beyond the birtai suite, the **AI Provider** also enables Moodle's **native AI f
 
 ## Pre-requisites
 
-- **Moodle 4.5** or higher
+- **Moodle 5.0** or higher (this `main` branch). For **Moodle 4.5**, use the `MOODLE_405_STABLE` branch.
 
 **For Local API Mode:**
 - The [moodle-course-generator](../moodle-course-generator) API running
@@ -168,30 +168,20 @@ HF_TOKEN=hf_your_token_here
 
 ### Step 3: Configure Moodle
 
-1. Go to `Site administration > General > AI > AI Providers`
+1. Go to `Site administration > General > AI > AI Providers`, click **Create a new provider instance**
+   and choose **birtai AI Provider** (a site upgraded from Moodle 4.5 already has one, created from
+   its settings: enable it).
 
    ![AI Providers](./_docs/images/aiprovider_birtai_ai_providers.png)
 
-2. Enable **birtai AI Provider** and click **Settings**
-
-   ![Enable Provider](./_docs/images/aiprovider_birtai_enable_birtai_ai_provider.png)
-
-3. Configure Local API settings:
+2. The connection to BirtAI and the rate limits per service are not part of the instance: they are
+   shared with the plugins that call BirtAI directly. Set them on
+   `/ai/provider/birtai/admin/settings.php`, linked from the form of the birtai instance together with
+   the reports, the web service setup and the token limits per user:
    - **Use local API**: ✅ Enabled (checked)
    - **Local API URL**: `http://localhost:8001`
    - **License Key**: Leave empty or use any value (not required for local API)
 
-4. Save changes
-
-**Moodle 5.0 and later** keep AI providers as instances:
-
-1. Go to `Site administration > General > AI > AI Providers`, click **Create a new provider instance**
-   and choose **birtai AI Provider** (a site upgraded from Moodle 4.5 already has one, created from
-   its settings: enable it).
-2. The connection to BirtAI (licence key, local API) and the rate limits per service are not part of
-   the instance: they are shared with the plugins that call BirtAI directly. Set them on
-   `/ai/provider/birtai/admin/settings.php`, linked from the form of the birtai instance together with
-   the reports, the web service setup and the token limits per user.
 3. The system instruction of the text actions is a setting of each action of the instance.
 
 ### Step 4: Configure cURL Settings

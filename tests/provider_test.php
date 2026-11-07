@@ -17,7 +17,6 @@
 namespace aiprovider_birtai;
 
 use aiprovider_birtai\local\admin_settings;
-use aiprovider_birtai\local\compat;
 use aiprovider_birtai\local\provider_migration;
 use core_ai\aiactions\generate_image;
 use core_ai\aiactions\generate_text;
@@ -28,7 +27,7 @@ use core_ai\aiactions\summarise_text;
 #[\PHPUnit\Framework\Attributes\CoversClass(\aiprovider_birtai\local\admin_settings::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\aiprovider_birtai\local\provider_migration::class)]
 /**
- * Tests of the birtai provider on the AI subsystem of Moodle 4.5 and of Moodle 5.0 and later.
+ * Tests of the birtai provider on the AI subsystem of Moodle 5.
  *
  * @package    aiprovider_birtai
  * @category   test
@@ -41,15 +40,12 @@ use core_ai\aiactions\summarise_text;
  */
 final class provider_test extends \advanced_testcase {
     /**
-     * A provider object the way the AI subsystem of this Moodle version builds it.
+     * A birtai provider instance, created the way the AI subsystem creates it.
      *
-     * @param array|null $actionconfig Action settings of the instance (Moodle 5.0 and later).
+     * @param array|null $actionconfig Action settings of the instance.
      * @return provider
      */
     private function make_provider(?array $actionconfig = null): provider {
-        if (!compat::has_provider_instances()) {
-            return new provider();
-        }
         return \core\di::get(\core_ai\manager::class)->create_provider_instance(
             classname: provider::class,
             name: 'BirtAI',
@@ -59,7 +55,7 @@ final class provider_test extends \advanced_testcase {
     }
 
     /**
-     * A settings page with the plugin settings (adminlib.php is not autoloaded on Moodle 4.5).
+     * A settings page with the plugin settings.
      *
      * @return \admin_settingpage
      */
@@ -74,10 +70,8 @@ final class provider_test extends \advanced_testcase {
     public function test_the_provider_loads_and_offers_its_actions(): void {
         $this->resetAfterTest();
 
-        $provider = $this->make_provider();
-        $actions = compat::has_provider_instances() ? provider::get_action_list() : $provider->get_action_list();
-
-        $this->assertSame([generate_text::class, generate_image::class, summarise_text::class], $actions);
+        $this->assertInstanceOf(provider::class, $this->make_provider());
+        $this->assertSame([generate_text::class, generate_image::class, summarise_text::class], provider::get_action_list());
         $this->assertContains('local_coursegen', array_column(provider::get_services(), 'id'));
         $this->assertContains('/provider/chat/completions', array_column(provider::get_actions(), 'id'));
     }
@@ -100,13 +94,9 @@ final class provider_test extends \advanced_testcase {
     }
 
     public function test_the_text_actions_have_a_system_instruction_setting(): void {
-        if (!compat::has_provider_instances()) {
-            $this->markTestSkipped('Moodle 4.5 has the action settings in the administration tree.');
-        }
         $this->resetAfterTest();
 
-        $form = provider::get_action_settings(generate_text::class);
-        $this->assertInstanceOf(form\action_text_form::class, $form);
+        $this->assertInstanceOf(form\action_text_form::class, provider::get_action_settings(generate_text::class));
         $this->assertInstanceOf(form\action_text_form::class, provider::get_action_settings(summarise_text::class));
         $this->assertFalse(provider::get_action_settings(generate_image::class));
         $this->assertSame(
@@ -116,32 +106,24 @@ final class provider_test extends \advanced_testcase {
         $this->assertSame([], provider::get_action_setting_defaults(generate_image::class));
     }
 
-    public function test_the_processor_uses_the_configured_system_instruction(): void {
+    public function test_the_processor_uses_the_instruction_of_the_instance(): void {
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
         $action = new generate_text(contextid: \context_system::instance()->id, userid: $user->id, prompttext: 'Hello');
+        $provider = $this->make_provider([
+            generate_text::class => ['enabled' => true, 'settings' => ['systeminstruction' => 'From the instance']],
+        ]);
 
-        if (compat::has_provider_instances()) {
-            $provider = $this->make_provider([
-                generate_text::class => ['enabled' => true, 'settings' => ['systeminstruction' => 'From the instance']],
-            ]);
-            $expected = 'From the instance';
-        } else {
-            $provider = $this->make_provider();
-            set_config('action_generate_text_instruction', 'From the plugin settings', 'aiprovider_birtai');
-            $expected = 'From the plugin settings';
-        }
         $processor = new process_generate_text($provider, $action);
         $method = new \ReflectionMethod($processor, 'get_system_instruction');
 
-        $this->assertSame($expected, $method->invoke($processor));
+        $this->assertSame('From the instance', $method->invoke($processor));
     }
 
     public function test_the_processor_falls_back_to_the_default_instruction(): void {
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
         $action = new summarise_text(contextid: \context_system::instance()->id, userid: $user->id, prompttext: 'Text');
-        unset_config('action_summarise_text_instruction', 'aiprovider_birtai');
         $provider = $this->make_provider([summarise_text::class => ['enabled' => true, 'settings' => []]]);
 
         $processor = new process_summarise_text($provider, $action);
@@ -150,8 +132,24 @@ final class provider_test extends \advanced_testcase {
         $this->assertSame(summarise_text::get_system_instruction(), $method->invoke($processor));
     }
 
+    public function test_a_failure_carries_every_error_field(): void {
+        $method = new \ReflectionMethod(abstract_processor::class, 'with_error_fields');
+
+        $this->assertSame(
+            ['success' => false, 'error' => 'Invalid answer', 'errorcode' => 500, 'errormessage' => 'Invalid answer'],
+            $method->invoke(null, ['success' => false, 'error' => 'Invalid answer'])
+        );
+        $this->assertSame(
+            ['success' => false, 'errorcode' => 504, 'errormessage' => 'Timed out', 'error' => 'Timed out'],
+            $method->invoke(null, ['success' => false, 'errorcode' => 504, 'errormessage' => 'Timed out'])
+        );
+        $success = ['success' => true, 'generatedcontent' => 'Hi'];
+        $this->assertSame($success, $method->invoke(null, $success));
+    }
+
     public function test_the_settings_page_holds_the_connection_and_rate_limits(): void {
         $this->resetAfterTest();
+
         $page = $this->settings_page();
 
         $names = array_map(fn($setting) => $setting->name, (array) $page->settings);
@@ -192,9 +190,6 @@ final class provider_test extends \advanced_testcase {
 
     public function test_the_moodle_45_settings_become_one_provider_instance(): void {
         global $DB;
-        if (!compat::has_provider_instances()) {
-            $this->markTestSkipped('Moodle 4.5 has no provider instances.');
-        }
         $this->resetAfterTest();
         set_config('use_local_api', 1, 'aiprovider_birtai');
         set_config('action_generate_text_instruction', 'Write in Basque', 'aiprovider_birtai');
@@ -220,9 +215,6 @@ final class provider_test extends \advanced_testcase {
 
     public function test_nothing_is_migrated_without_settings(): void {
         global $DB;
-        if (!compat::has_provider_instances()) {
-            $this->markTestSkipped('Moodle 4.5 has no provider instances.');
-        }
         $this->resetAfterTest();
         foreach (['enabled', 'use_local_api', 'licensekey'] as $name) {
             unset_config($name, 'aiprovider_birtai');

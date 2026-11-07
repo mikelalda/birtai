@@ -17,9 +17,8 @@
 /**
  * The plugin settings of birtai: connection to BirtAI and rate limits per service.
  *
- * Moodle 4.5 shows them in the administration tree (settings.php). Moodle 5.0 and later
- * no longer load the settings.php of AI provider plugins, so this page shows and saves
- * the same settings there.
+ * Moodle 5 does not load the settings.php of AI provider plugins, so this page shows and
+ * saves them. The form of a birtai provider instance links to it.
  *
  * @package    aiprovider_birtai
  * @copyright  2026 Mikel Aldalur
@@ -30,11 +29,6 @@ require('../../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
 use aiprovider_birtai\local\admin_settings;
-use aiprovider_birtai\local\compat;
-
-if (!compat::has_provider_instances()) {
-    redirect(new moodle_url('/admin/settings.php', ['section' => 'aiprovider_birtai']));
-}
 
 $url = new moodle_url('/ai/provider/birtai/admin/settings.php');
 $context = context_system::instance();

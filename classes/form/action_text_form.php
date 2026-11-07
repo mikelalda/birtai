@@ -17,9 +17,7 @@
 namespace aiprovider_birtai\form;
 
 /**
- * Settings of the text actions of a birtai provider instance (Moodle 5.0 and later).
- *
- * Only used from Moodle 5.0, where \core_ai\form\action_settings_form exists.
+ * Settings of the text actions of a birtai provider instance.
  *
  * @package    aiprovider_birtai
  * @copyright  2026 Mikel Aldalur

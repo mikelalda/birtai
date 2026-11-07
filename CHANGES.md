@@ -1,3 +1,24 @@
+## 1.2.0
+
+**Released on:** 2026-11-08
+
+**Compatibility note:** This version is compatible with **Moodle 5.0 to 5.3**: it is the `main`
+branch. Moodle 4.5 has its own branch, `MOODLE_405_STABLE` (versions up to 2026110899).
+
+## Changed
+- Moodle 5 only: no compatibility layer for the provider API of Moodle 4.5 any more, no
+  settings.php (Moodle 5 does not load it).
+- The upgrade to provider instances runs at version 2026110900, above every version of the 4.5
+  branch, so it runs for any site that comes from it (again, harmlessly, on sites that ran 1.1.0).
+
+## Fixed
+- **Web service setup with the local API**: it no longer waits for a site registration that the
+  local API does not do. That left the web service "not configured" and blocked the AI review
+  actions of assign_ai.
+- **Failed AI requests**: a failure lacked some of the error fields that Moodle passes, typed, to
+  the response class, so an invalid answer or a blocked URL ended in a TypeError instead of an
+  error message.
+
 ## 1.1.0
 
 **Released on:** 2026-11-08

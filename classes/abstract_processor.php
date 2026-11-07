@@ -73,17 +73,9 @@ abstract class abstract_processor extends process_base {
      * @return string System instruction text.
      */
     protected function get_system_instruction(): string {
+        // The setting of the action in this provider instance.
         $action = get_class($this->action);
-        // Moodle 5.0 and later: the setting of this provider instance.
-        if (property_exists($this->provider, 'actionconfig')) {
-            $instruction = (string) ($this->provider->actionconfig[$action]['settings']['systeminstruction'] ?? '');
-            if ($instruction !== '') {
-                return $instruction;
-            }
-        }
-        // Moodle 4.5: the plugin setting of the action.
-        $actionname = substr($action, (strrpos($action, '\\') + 1));
-        $instruction = (string) get_config('aiprovider_birtai', "action_{$actionname}_instruction");
+        $instruction = (string) ($this->provider->actionconfig[$action]['settings']['systeminstruction'] ?? '');
         return $instruction !== '' ? $instruction : $this->action::get_system_instruction();
     }
 
@@ -94,6 +86,34 @@ abstract class abstract_processor extends process_base {
      */
     #[\Override]
     protected function query_ai_api(): array {
+        return self::with_error_fields($this->request_ai_api());
+    }
+
+    /**
+     * Give a failed result the three error fields that Moodle passes, typed, to the response
+     * class: without them a failure became a TypeError instead of an error message.
+     *
+     * @param array $result
+     * @return array
+     */
+    protected static function with_error_fields(array $result): array {
+        if (!empty($result['success'])) {
+            return $result;
+        }
+        $message = (string) ($result['errormessage'] ?? $result['error'] ?? '');
+        return array_merge($result, [
+            'errorcode' => (int) ($result['errorcode'] ?? 500),
+            'error' => (string) ($result['error'] ?? $message),
+            'errormessage' => $message,
+        ]);
+    }
+
+    /**
+     * Send the request to the BirtAI service and read its answer.
+     *
+     * @return array Processed response data, either success or error.
+     */
+    private function request_ai_api(): array {
         global $USER;
 
         $licensekey = get_config('aiprovider_birtai', 'licensekey');
