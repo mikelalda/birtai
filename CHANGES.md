@@ -1,3 +1,24 @@
+## 1.1.0
+
+**Released on:** 2026-11-08
+
+**Compatibility note:** This version is compatible with **Moodle 4.5 and Moodle 5.0 to 5.3**.
+
+## Fixed
+- **Moodle 5.0 and later**: the provider class follows the provider API of Moodle 5 (static action
+  methods, action settings per instance). It caused a fatal error on Moodle 5, which also broke the
+  service and action lists of the reports.
+- **System instruction of "Generate text"**: the configured instruction was read from a setting name
+  that was never saved, so the default one was always used.
+
+## Added
+- **Settings page for Moodle 5.0 and later** (`admin/settings.php`): Moodle 5 no longer loads the
+  `settings.php` of AI provider plugins. The form of a birtai provider instance links to it and to the
+  plugin's other pages. The defaults of the settings are written on install and upgrade.
+- **Provider instance from the Moodle 4.5 settings**: on upgrade, a site that used birtai gets a
+  provider instance (enabled if birtai was enabled), keeping the system instructions.
+- PHPUnit tests of the provider on both provider APIs.
+
 ## 1.0.8
 
 **Released on:** 2026-01-29

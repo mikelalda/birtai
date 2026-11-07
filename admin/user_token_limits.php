@@ -27,6 +27,8 @@ require_once($CFG->libdir . '/adminlib.php');
 
 use aiprovider_birtai\local\user_token_limit_manager;
 
+require_login();
+
 $context = context_system::instance();
 require_capability('aiprovider/birtai:managetokenlimits', $context);
 
@@ -45,7 +47,7 @@ $pageurl = new moodle_url('/ai/provider/birtai/admin/user_token_limits.php', [
     'page' => $page,
     'perpage' => $perpage,
 ]);
-admin_externalpage_setup('aiprovider_birtai_userlimits', '', null, $pageurl);
+\aiprovider_birtai\local\admin_settings::setup_page('aiprovider_birtai_userlimits', $pageurl);
 
 $heading = get_string('link_usertokenlimits', 'aiprovider_birtai');
 $PAGE->set_title($heading);

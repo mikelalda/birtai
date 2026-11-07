@@ -61,11 +61,6 @@ class process_generate_text extends abstract_processor {
         return new Uri($this->get_base_url() . '/provider/chat/completions');
     }
 
-    #[\Override]
-    protected function get_system_instruction(): string {
-        return get_config('aiprovider_birtai', 'action_generate_text_systeminstruction');
-    }
-
     /**
      * Build the request body for the API call.
      */

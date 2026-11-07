@@ -131,5 +131,18 @@ function xmldb_aiprovider_birtai_upgrade($oldversion) {
         // Birtai savepoint reached.
         upgrade_plugin_savepoint(true, 2025120301, 'aiprovider', 'birtai');
     }
+
+    if ($oldversion < 2026110800) {
+        if (\aiprovider_birtai\local\compat::has_provider_instances()) {
+            // Moodle 5.0 and later no longer write the defaults of settings.php.
+            \aiprovider_birtai\local\admin_settings::apply_defaults();
+            // And they keep AI providers as instances: turn the settings of Moodle 4.5
+            // into one, so a site that used birtai keeps it as a provider.
+            \aiprovider_birtai\local\provider_migration::create_instance_from_settings();
+        }
+
+        // Birtai savepoint reached.
+        upgrade_plugin_savepoint(true, 2026110800, 'aiprovider', 'birtai');
+    }
     return true;
 }
