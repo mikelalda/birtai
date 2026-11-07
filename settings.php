@@ -27,8 +27,6 @@ use core_ai\admin\admin_settingspage_provider;
 
 defined('MOODLE_INTERNAL') || die();
 
-// Moodle 4.5 loads this file. Moodle 5.0 and later do not load the settings.php of AI
-// provider plugins: there the settings are on admin/settings.php of this plugin.
 if ($hassiteconfig) {
     $settings = new admin_settingspage_provider(
         'aiprovider_birtai',

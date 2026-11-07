@@ -74,14 +74,7 @@ abstract class abstract_processor extends process_base {
      */
     protected function get_system_instruction(): string {
         $action = get_class($this->action);
-        // Moodle 5.0 and later: the setting of this provider instance.
-        if (property_exists($this->provider, 'actionconfig')) {
-            $instruction = (string) ($this->provider->actionconfig[$action]['settings']['systeminstruction'] ?? '');
-            if ($instruction !== '') {
-                return $instruction;
-            }
-        }
-        // Moodle 4.5: the plugin setting of the action.
+        // The setting of the action (provider::get_action_settings()).
         $actionname = substr($action, (strrpos($action, '\\') + 1));
         $instruction = (string) get_config('aiprovider_birtai', "action_{$actionname}_instruction");
         return $instruction !== '' ? $instruction : $this->action::get_system_instruction();

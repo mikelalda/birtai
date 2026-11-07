@@ -138,33 +138,7 @@ final class admin_settings {
     }
 
     /**
-     * Save the default of every plugin setting that has no value yet.
-     *
-     * Moodle 4.5 does it itself through the administration tree when it installs or
-     * upgrades the plugin. From Moodle 5.0 the settings are not in that tree, so the
-     * plugin has to.
-     *
-     * @return int Number of settings written.
-     */
-    public static function apply_defaults(): int {
-        global $CFG;
-        require_once($CFG->libdir . '/adminlib.php');
-
-        $page = new \admin_settingpage('aiprovider_birtai', get_string('pluginname', 'aiprovider_birtai'));
-        self::add_settings($page);
-        $count = 0;
-        foreach ($page->settings as $setting) {
-            $default = $setting->get_defaultsetting();
-            if ($default !== null && $setting->get_setting() === null) {
-                $setting->write_setting($default);
-                $count++;
-            }
-        }
-        return $count;
-    }
-
-    /**
-     * The administration pages of the plugin, with where Moodle 4.5 lists them.
+     * The administration pages of the plugin, with where the administration tree lists them.
      *
      * @return array[] Each one {name, parent, title, url, capability}.
      */
@@ -192,66 +166,5 @@ final class admin_settings {
                 'capability' => 'aiprovider/birtai:managetokenlimits',
             ],
         ];
-    }
-
-    /**
-     * Set up one of the plugin's administration pages.
-     *
-     * Moodle 4.5 has the page in the administration tree; from Moodle 5.0 the page sets up
-     * the context, layout and capability check itself.
-     *
-     * @param string $section Name of the page in get_pages().
-     * @param moodle_url $url
-     */
-    public static function setup_page(string $section, moodle_url $url): void {
-        global $PAGE;
-
-        if (!compat::has_provider_instances()) {
-            admin_externalpage_setup($section, '', null, $url);
-            return;
-        }
-        $page = array_column(self::get_pages(), null, 'name')[$section];
-        $context = \context_system::instance();
-        require_login();
-        require_capability($page['capability'], $context);
-        $PAGE->set_context($context);
-        $PAGE->set_url($url);
-        $PAGE->set_pagelayout('admin');
-        $PAGE->set_title($page['title']);
-        $PAGE->set_heading($page['title']);
-    }
-
-    /**
-     * Save the submitted values of a settings page that is not in the administration tree.
-     *
-     * @param \admin_settingpage $settings
-     * @param \stdClass $data The submitted form.
-     * @return int Number of settings that changed; errors go to admin_get_root()->errors.
-     */
-    public static function write_settings(\admin_settingpage $settings, \stdClass $data): int {
-        $adminroot = admin_get_root();
-        $formdata = (array) $data;
-        $count = 0;
-        foreach ($settings->settings as $setting) {
-            $fullname = $setting->get_full_name();
-            if (!array_key_exists($fullname, $formdata)) {
-                continue;
-            }
-            $original = $setting->get_setting();
-            $error = $setting->write_setting($formdata[$fullname]);
-            if ($error !== '') {
-                $adminroot->errors[$fullname] = (object) [
-                    'data' => $formdata[$fullname],
-                    'id' => $setting->get_id(),
-                    'error' => $error,
-                ];
-            } else {
-                $setting->write_setting_flags($formdata);
-            }
-            if ($setting->post_write_settings($original)) {
-                $count++;
-            }
-        }
-        return $count;
     }
 }

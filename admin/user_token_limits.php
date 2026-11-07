@@ -47,7 +47,7 @@ $pageurl = new moodle_url('/ai/provider/birtai/admin/user_token_limits.php', [
     'page' => $page,
     'perpage' => $perpage,
 ]);
-\aiprovider_birtai\local\admin_settings::setup_page('aiprovider_birtai_userlimits', $pageurl);
+admin_externalpage_setup('aiprovider_birtai_userlimits', '', null, $pageurl);
 
 $heading = get_string('link_usertokenlimits', 'aiprovider_birtai');
 $PAGE->set_title($heading);

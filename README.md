@@ -183,16 +183,8 @@ HF_TOKEN=hf_your_token_here
 
 4. Save changes
 
-**Moodle 5.0 and later** keep AI providers as instances:
-
-1. Go to `Site administration > General > AI > AI Providers`, click **Create a new provider instance**
-   and choose **birtai AI Provider** (a site upgraded from Moodle 4.5 already has one, created from
-   its settings: enable it).
-2. The connection to BirtAI (licence key, local API) and the rate limits per service are not part of
-   the instance: they are shared with the plugins that call BirtAI directly. Set them on
-   `/ai/provider/birtai/admin/settings.php`, linked from the form of the birtai instance together with
-   the reports, the web service setup and the token limits per user.
-3. The system instruction of the text actions is a setting of each action of the instance.
+**Moodle 5.0 and later**: use the `main` branch of this plugin. This `MOODLE_405_STABLE`
+branch is for Moodle 4.5.
 
 ### Step 4: Configure cURL Settings
 

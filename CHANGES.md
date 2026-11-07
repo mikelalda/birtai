@@ -2,22 +2,18 @@
 
 **Released on:** 2026-11-08
 
-**Compatibility note:** This version is compatible with **Moodle 4.5 and Moodle 5.0 to 5.3**.
+**Compatibility note:** This version is compatible **with Moodle 4.5 only**: it is the
+`MOODLE_405_STABLE` branch. Moodle 5.0 and later need the `main` branch.
 
 ## Fixed
-- **Moodle 5.0 and later**: the provider class follows the provider API of Moodle 5 (static action
-  methods, action settings per instance). It caused a fatal error on Moodle 5, which also broke the
-  service and action lists of the reports.
 - **System instruction of "Generate text"**: the configured instruction was read from a setting name
   that was never saved, so the default one was always used.
+- **Web service setup with the local API**: it no longer waits for a site registration that the
+  local API does not do. That left the web service "not configured" and blocked the AI review
+  actions of assign_ai.
 
 ## Added
-- **Settings page for Moodle 5.0 and later** (`admin/settings.php`): Moodle 5 no longer loads the
-  `settings.php` of AI provider plugins. The form of a birtai provider instance links to it and to the
-  plugin's other pages. The defaults of the settings are written on install and upgrade.
-- **Provider instance from the Moodle 4.5 settings**: on upgrade, a site that used birtai gets a
-  provider instance (enabled if birtai was enabled), keeping the system instructions.
-- PHPUnit tests of the provider on both provider APIs.
+- PHPUnit tests of the provider and of the web service setup.
 
 ## 1.0.8
 
