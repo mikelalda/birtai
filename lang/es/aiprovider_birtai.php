@@ -301,6 +301,7 @@ $string['ws_service_name'] = 'Servicio web de birtai';
 $string['ws_step_enableauth'] = 'Habilitando plugin de autenticación de servicios web…';
 $string['ws_step_enablerest'] = 'Habilitando protocolo REST…';
 $string['ws_step_enablews'] = 'Habilitando servicios web del sitio…';
+$string['ws_step_registration_local'] = 'API local: el sitio no necesita registrarse, el token ya se puede usar.';
 $string['ws_step_registration_sent'] = 'Solicitud de registro enviada.';
 $string['ws_step_role_assign'] = 'Asignando rol al usuario del servicio…';
 $string['ws_step_role_caps'] = 'Estableciendo capacidades de rol requeridas…';

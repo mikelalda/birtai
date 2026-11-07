@@ -120,7 +120,8 @@ class webservice_config {
             'tokenexists' => false,
             'tokencreated' => null,
             'registration' => [
-                'verified' => get_config('aiprovider_birtai', 'registration_verified') ?: false,
+                // The local API has no registration: the site does not need one there.
+                'verified' => self::uses_local_api() || get_config('aiprovider_birtai', 'registration_verified'),
                 'lastsent' => get_config('aiprovider_birtai', 'registration_lastsent') ?: '',
                 'laststatus' => get_config('aiprovider_birtai', 'registration_laststatus') ?: '',
             ],
@@ -714,6 +715,9 @@ class webservice_config {
      * @return array
      */
     private static function verify_remote_registration(array $status): array {
+        if (self::uses_local_api()) {
+            return $status;
+        }
         try {
             $client = new ai_services_api();
             $registration = $client->request('GET', '/registration-status', [
@@ -740,6 +744,10 @@ class webservice_config {
     private static function send_registration($token): array {
         global $CFG;
 
+        if (self::uses_local_api()) {
+            return [get_string('ws_step_registration_local', 'aiprovider_birtai')];
+        }
+
         $payload = [
             'site_id' => self::get_site_id(),
             'domain' => $CFG->wwwroot,
@@ -765,6 +773,15 @@ class webservice_config {
             set_config('registration_laststatus', 'error', 'aiprovider_birtai');
             return [get_string('ws_error_registration', 'aiprovider_birtai', $e->getMessage())];
         }
+    }
+
+    /**
+     * Whether the plugin talks to the local API, which has no site registration.
+     *
+     * @return bool
+     */
+    private static function uses_local_api(): bool {
+        return !empty(get_config('aiprovider_birtai', 'use_local_api'));
     }
 
     /**

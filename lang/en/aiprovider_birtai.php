@@ -301,6 +301,7 @@ $string['ws_service_name'] = 'birtai web service';
 $string['ws_step_enableauth'] = 'Enabling webservices auth plugin…';
 $string['ws_step_enablerest'] = 'Enabling REST protocol…';
 $string['ws_step_enablews'] = 'Enabling site web services…';
+$string['ws_step_registration_local'] = 'Local API: the site does not need to register, the token is ready to use.';
 $string['ws_step_registration_sent'] = 'Registration request sent.';
 $string['ws_step_role_assign'] = 'Assigning role to service user…';
 $string['ws_step_role_caps'] = 'Setting required role capabilities…';
